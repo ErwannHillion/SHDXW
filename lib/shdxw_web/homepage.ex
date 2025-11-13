@@ -5,8 +5,7 @@ defmodule ShdxwWeb.Homepage do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "SHDXW - Shadow Developer")
-     |> assign(:projects, projects())}
+     |> assign(:page_title, "SHDXW - Shadow Developer")}
   end
 
   @impl true
