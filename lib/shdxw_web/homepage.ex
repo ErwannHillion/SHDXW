@@ -75,8 +75,76 @@ defmodule ShdxwWeb.Homepage do
         </div>
       </div>
       
+    <!-- Scroll Effect Section -->
+      <div
+        id="scroll-effect"
+        phx-hook="ScrollEffect"
+        class="scroll-wrapper relative"
+        style="height: 550vh;"
+      >
+        <div
+          class="scroll-sticky sticky top-[5vh] h-[90vh]"
+          style="position: sticky; top: 5vh; height: 90vh;"
+        >
+          <div class="max-w-7xl mx-auto px-4 h-full">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+              <!-- Colonne gauche - Textes -->
+              <div class="bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/20 rounded-2xl p-8 flex flex-col justify-between">
+                <div class="relative h-full">
+                  <!-- Section 1 -->
+                  <div class="scroll-content active absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                    <h2 class="text-5xl font-black text-white mb-4">
+                      <span class="text-purple-500">Innovation</span> Continue
+                    </h2>
+                    <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
+                    </div>
+                    <p class="text-white/60 text-lg">
+                      Je repousse constamment les limites du développement web pour créer des expériences uniques et mémorables.
+                    </p>
+                  </div>
+                  <!-- Section 2 -->
+                  <div class="scroll-content absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                    <h2 class="text-5xl font-black text-white mb-4">
+                      <span class="text-purple-500">Performance</span> Optimale
+                    </h2>
+                    <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
+                    </div>
+                    <p class="text-white/60 text-lg">
+                      Chaque ligne de code est optimisée pour offrir une expérience utilisateur fluide et rapide.
+                    </p>
+                  </div>
+                  <!-- Section 3 -->
+                  <div class="scroll-content absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                    <h2 class="text-5xl font-black text-white mb-4">
+                      <span class="text-purple-500">Design</span> Moderne
+                    </h2>
+                    <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
+                    </div>
+                    <p class="text-white/60 text-lg">
+                      Des interfaces élégantes et intuitives qui captivent et convertissent.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <!-- Colonne droite - Visuels -->
+              <div class="bg-gradient-to-br from-black to-purple-950/40 border border-purple-500/20 rounded-2xl overflow-hidden relative">
+                <div class="scroll-section active absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
+                  <div class="text-9xl font-black text-purple-500">01</div>
+                </div>
+                <div class="scroll-section absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
+                  <div class="text-9xl font-black text-purple-500">02</div>
+                </div>
+                <div class="scroll-section absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
+                  <div class="text-9xl font-black text-purple-500">03</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     <!-- Section en construction-->
-      <div id="en construction" class="py-32 px-4 bg-black relative overflow-hidden">
+      <div id="en-construction" class="py-32 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-purple-950/20 to-transparent"></div>
 
         <div class="max-w-4xl mx-auto text-center relative">
@@ -90,7 +158,8 @@ defmodule ShdxwWeb.Homepage do
           </p>
         </div>
       </div>
-      <!-- Contact Section -->
+      
+    <!-- Contact Section -->
       <div id="contact" class="py-32 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-purple-950/20 to-transparent"></div>
 
