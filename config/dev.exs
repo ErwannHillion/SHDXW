@@ -1,14 +1,55 @@
 import Config
 
+# env vars
+
+env_db_user =
+  System.get_env("POSTGRES_USR") ||
+    raise """
+    environment variable POSTGRES_USR is missing.
+    """
+
+env_db_passwd =
+  System.get_env("POSTGRES_PASSWD") ||
+    raise """
+    environment variable POSTGRES_PASSWD is missing.
+    """
+
+env_db_hostname =
+  System.get_env("POSTGRES_HOSTNAME") ||
+    raise """
+    environment variable POSTGRES_HOSTNAME is missing.
+    Example: localhost
+    """
+
+env_db_dbname =
+  System.get_env("POSTGRES_DBNAME") ||
+    raise """
+    environment variable POSTGRES_DBNAME is missing.
+    Example: ig_intranet_dev
+    """
+
+env_db_pool_size =
+  System.get_env("POSTGRES_POOL_SIZE") ||
+    raise """
+    environment variable POSTGRES_POOL_SIZE is missing.
+    Example: 1
+    """
+
+env_secret_key_base =
+  System.get_env("SECRET_KEY_BASE") ||
+    raise """
+    environment variable SECRET_KEY_BASE is missing.
+    """
+
 # Configure your database
 config :shdxw, Shdxw.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "shdxw_dev",
+  username: env_db_user,
+  password: env_db_passwd,
+  database: env_db_dbname,
+  hostname: env_db_hostname,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: String.to_integer(env_db_pool_size)
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -23,7 +64,7 @@ config :shdxw, ShdxwWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "UjigDhGpeDhxcHvcmi8MSICg6qEznj+GepJrdPx2wM3eBRkdCGXDF9+cYox1k+Y8",
+  secret_key_base: env_secret_key_base,
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:shdxw, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:shdxw, ~w(--watch)]}
