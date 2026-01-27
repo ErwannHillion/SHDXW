@@ -94,6 +94,7 @@
 .scroll-content.active,
 .scroll-section.active {
   opacity: 1 !important;
+  pointer-events: auto;
 }
 
 /* Add variants based on LiveView classes */

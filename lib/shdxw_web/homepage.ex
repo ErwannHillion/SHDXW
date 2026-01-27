@@ -41,7 +41,6 @@ defmodule ShdxwWeb.Homepage do
             </p>
             <p class="text-lg mb-12 text-white/60 max-w-2xl mx-auto leading-relaxed">
               Dans l'obscurité naissent les meilleures créations.
-              Je façonne des expériences digitales exceptionnelles avec précision et innovation.
             </p>
             <div class="flex gap-4 justify-center flex-wrap">
               <a
@@ -92,50 +91,92 @@ defmodule ShdxwWeb.Homepage do
               <div class="bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/20 rounded-2xl p-8 flex flex-col justify-between">
                 <div class="relative h-full">
                   <!-- Section 1 -->
-                  <div class="scroll-content active absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                  <div class="scroll-content active absolute inset-0 flex flex-col justify-center text-center opacity-0 transition-opacity duration-500">
                     <h2 class="text-5xl font-black text-white mb-4">
-                      <span class="text-purple-500">Innovation</span> Continue
+                      <span class="text-purple-500">Who</span> I am
                     </h2>
                     <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
                     </div>
                     <p class="text-white/60 text-lg">
-                      Je repousse constamment les limites du développement web pour créer des expériences uniques et mémorables.
+                      First of all, I am passionate about technology and development, always looking for new challenges.
+                    </p>
+                    <p class="text-white/60 text-lg">
+                      As a fast learner, I have acquired skills across a wide range of fields.
                     </p>
                   </div>
                   <!-- Section 2 -->
-                  <div class="scroll-content absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                  <div class="scroll-content absolute inset-0 flex flex-col justify-center text-center opacity-0 transition-opacity duration-500">
                     <h2 class="text-5xl font-black text-white mb-4">
-                      <span class="text-purple-500">Performance</span> Optimale
+                      <span class="text-purple-500">Music</span> is my life
                     </h2>
                     <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
                     </div>
                     <p class="text-white/60 text-lg">
-                      Chaque ligne de code est optimisée pour offrir une expérience utilisateur fluide et rapide.
+                      Music is a constant source of inspiration for me, strongly influencing my creativity.
+                      That is why I had the opportunity, thanks to a record label, to share my musical creations on major platforms such as Spotify, Deezer, and Apple Music.
+                      In fact, the two images you just saw are the covers of my EPs.
                     </p>
                   </div>
                   <!-- Section 3 -->
-                  <div class="scroll-content absolute inset-0 flex flex-col justify-around text-center opacity-0 transition-opacity duration-500">
+                  <div class="scroll-content absolute inset-0 flex flex-col justify-center text-center opacity-0 transition-opacity duration-500">
                     <h2 class="text-5xl font-black text-white mb-4">
-                      <span class="text-purple-500">Design</span> Moderne
+                      <span class="text-purple-500">Devloppment</span> Skills
                     </h2>
                     <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
                     </div>
                     <p class="text-white/60 text-lg">
-                      Des interfaces élégantes et intuitives qui captivent et convertissent.
+                      I am proficient in various programming languages and frameworks, including Elixir, Phoenix, JavaScript, and React.
+                      I enjoy creating efficient and scalable web applications while continuously improving my skills.
+                    </p>
+                  </div>
+                  <!-- Section 3 -->
+                  <div class="scroll-content absolute inset-0 flex flex-col justify-center text-center opacity-0 transition-opacity duration-500">
+                    <h2 class="text-5xl font-black text-white mb-4">
+                      <span class="text-purple-500">Why</span> Elixir?
+                    </h2>
+                    <div class="w-full h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent my-6">
+                    </div>
+                    <p class="text-white/60 text-lg">
+                      Elixir is a scalable and maintainable language that allows me to build high-performance applications.
+                      Its concurrency model and fault-tolerance features make it an ideal choice for modern web development.
+                      Also it has a vibrant community that constantly pushes the boundaries of what can be achieved.
                     </p>
                   </div>
                 </div>
               </div>
+              <%!-- Section 4 --%>
               <!-- Colonne droite - Visuels -->
               <div class="bg-gradient-to-br from-black to-purple-950/40 border border-purple-500/20 rounded-2xl overflow-hidden relative">
                 <div class="scroll-section active absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
-                  <div class="text-9xl font-black text-purple-500">01</div>
+                  <img
+                    src="https://i.scdn.co/image/ab67616d00001e02e2d9a193422beb22cc65bbe9"
+                    alt="Development Image 1"
+                    class="w-3/4 h-3/4 object-contain rounded-lg shadow-2xl shadow-purple-600/50"
+                  />
                 </div>
                 <div class="scroll-section absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
-                  <div class="text-9xl font-black text-purple-500">02</div>
+                  <img
+                    src="https://i.scdn.co/image/ab67616d00001e02326e5a1d225874bcfadf3c57"
+                    alt="Development Image 2"
+                    class="w-3/4 h-3/4 object-contain rounded-lg shadow-2xl shadow-purple-600/50"
+                  />
+                </div>
+                <div class="scroll-section absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10 flex flex-col gap-6">
+                  <h2 class="text-4xl font-black text-white mb-4 ">
+                    <span class="text-purple-500">My</span> GitHub Stats
+                  </h2>
+
+                  <img
+                    src="https://github-readme-stats.vercel.app/api/top-langs/?username=ErwannHillion&layout=compact&theme=tokyonight"
+                    height="150"
+                  />
                 </div>
                 <div class="scroll-section absolute inset-0 opacity-0 transition-opacity duration-500 flex items-center justify-center z-10">
-                  <div class="text-9xl font-black text-purple-500">03</div>
+                  <img
+                    src="https://www.digiforma.com/wp-content/uploads/2024/03/phoenix-elixir.jpg"
+                    alt="Elixir Logo"
+                    class="w-3/4 h-3/4 object-contain rounded-lg shadow-2xl shadow-purple-600/50"
+                  />
                 </div>
               </div>
             </div>
