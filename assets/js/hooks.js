@@ -3,40 +3,72 @@ import ScrollEffect from "./homepage_scroll"
 // Draggable window hook
 const Draggable = {
     mounted() {
+        this.state = {
+            isDragging: false,
+            startX: 0,
+            startY: 0,
+            initialX: 0,
+            initialY: 0
+        };
+
         const el = this.el;
-        const titlebar = el.querySelector('.window-titlebar');
+        const windowId = el.id;
 
-        if (!titlebar) return;
+        this.handleMouseDown = (e) => {
+            // Ignore if clicking on buttons
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
 
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
+            // Only drag from titlebar
+            const titlebar = e.target.closest('.window-titlebar');
+            if (!titlebar) return;
 
-        titlebar.addEventListener('mousedown', (e) => {
-            if (e.target.tagName === 'BUTTON') return;
+            e.preventDefault();
 
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            initialX = el.offsetLeft;
-            initialY = el.offsetTop;
+            // Focus the window via the component
+            const componentId = el.dataset.componentId;
+            if (componentId && windowId) {
+                this.pushEventTo(`#${componentId}`, 'focus_window', { 'window-id': windowId });
+            }
+
+            this.state.isDragging = true;
+            this.state.startX = e.clientX;
+            this.state.startY = e.clientY;
+            this.state.initialX = el.offsetLeft;
+            this.state.initialY = el.offsetTop;
 
             el.style.transition = 'none';
-        });
+            document.body.style.cursor = 'grabbing';
+            document.body.style.userSelect = 'none';
+        };
 
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
+        this.handleMouseMove = (e) => {
+            if (!this.state.isDragging) return;
 
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
+            const dx = e.clientX - this.state.startX;
+            const dy = e.clientY - this.state.startY;
 
-            el.style.left = `${initialX + dx}px`;
-            el.style.top = `${initialY + dy}px`;
-        });
+            el.style.left = `${this.state.initialX + dx}px`;
+            el.style.top = `${this.state.initialY + dy}px`;
+        };
 
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            el.style.transition = '';
-        });
+        this.handleMouseUp = () => {
+            if (this.state.isDragging) {
+                this.state.isDragging = false;
+                el.style.transition = '';
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+            }
+        };
+
+        // Attach listeners
+        el.addEventListener('mousedown', this.handleMouseDown);
+        document.addEventListener('mousemove', this.handleMouseMove);
+        document.addEventListener('mouseup', this.handleMouseUp);
+    },
+
+    destroyed() {
+        document.removeEventListener('mousemove', this.handleMouseMove);
+        document.removeEventListener('mouseup', this.handleMouseUp);
     }
 };
 

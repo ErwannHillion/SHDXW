@@ -8,6 +8,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      |> assign(:windows, %{})
      |> assign(:active_window, nil)
      |> assign(:z_index_counter, 1)
+     |> assign(:start_menu_open, false)
      |> assign(:notepad_content, "Bienvenue sur SHDXW OS!\n\nCeci est un notepad. Vous pouvez écrire ce que vous voulez ici.\n\n- Essayez le Snake!\n- Jouez au Démineur!\n- Explorez les applications...")
      |> assign(:snake_game, init_snake_game())
      |> assign(:minesweeper_game, init_minesweeper_game())
@@ -78,6 +79,14 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   end
 
   @impl true
+  def handle_event("toggle_start_menu", _, socket) do
+    {:noreply, assign(socket, :start_menu_open, not socket.assigns.start_menu_open)}
+  end
+
+  def handle_event("close_start_menu", _, socket) do
+    {:noreply, assign(socket, :start_menu_open, false)}
+  end
+
   def handle_event("open_app", %{"app" => app}, socket) do
     window_id = "#{app}_#{System.unique_integer([:positive])}"
 
@@ -99,6 +108,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      socket
      |> assign(:windows, windows)
      |> assign(:active_window, window_id)
+     |> assign(:start_menu_open, false)
      |> assign(:z_index_counter, socket.assigns.z_index_counter + 1)}
   end
 
@@ -456,6 +466,15 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   def render(assigns) do
     ~H"""
     <div id={@id} class="os-container relative w-full h-[700px] bg-gradient-to-br from-gray-900 via-purple-950/50 to-gray-900 rounded-2xl border border-purple-500/30 overflow-hidden">
+      <!-- Click overlay to close start menu -->
+      <%= if @start_menu_open do %>
+        <div
+          class="absolute inset-0 z-40"
+          phx-click="close_start_menu"
+          phx-target={@myself}
+        ></div>
+      <% end %>
+
       <!-- Desktop -->
       <div class="desktop absolute inset-0 p-6 pb-16" phx-hook="ShdxwOS" id={"#{@id}-desktop"}>
         <!-- Desktop Icons -->
@@ -471,6 +490,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <.window
             window={window}
             myself={@myself}
+            component_id={@id}
             active={@active_window == window_id}
             notepad_content={@notepad_content}
             snake_game={@snake_game}
@@ -480,13 +500,22 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         <% end %>
       </div>
 
+      <!-- Start Menu (Windows XP Style) -->
+      <.start_menu :if={@start_menu_open} myself={@myself} />
+
       <!-- Taskbar -->
-      <div class="taskbar absolute bottom-0 left-0 right-0 h-14 bg-black/80 backdrop-blur-xl border-t border-purple-500/30 flex items-center px-4 gap-2">
+      <div class="taskbar absolute bottom-0 left-0 right-0 h-14 bg-black/80 backdrop-blur-xl border-t border-purple-500/30 flex items-center px-4 gap-2 z-50">
         <!-- Start Button -->
-        <div class="start-btn flex items-center gap-2 px-4 py-2 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg cursor-pointer transition-all">
-          <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-violet-600 rounded-md"></div>
-          <span class="text-white font-semibold text-sm">SHDXW</span>
-        </div>
+        <button
+          phx-click="toggle_start_menu"
+          phx-target={@myself}
+          class={"start-btn flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all #{if @start_menu_open, do: "bg-purple-600/70 shadow-lg shadow-purple-600/30", else: "bg-purple-600/30 hover:bg-purple-600/50"}"}
+        >
+          <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-violet-600 rounded-md flex items-center justify-center">
+            <span class="text-white text-xs font-black">S</span>
+          </div>
+          <span class="text-white font-semibold text-sm">Démarrer</span>
+        </button>
 
         <div class="h-8 w-px bg-white/20 mx-2"></div>
 
@@ -553,20 +582,213 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     """
   end
 
+  defp start_menu(assigns) do
+    ~H"""
+    <div class="start-menu absolute bottom-14 left-4 w-96 bg-gradient-to-b from-gray-900 to-gray-950 rounded-t-xl border border-purple-500/30 shadow-2xl shadow-purple-900/50 z-50 overflow-hidden">
+      <!-- Header with user profile (Windows XP style) -->
+      <div class="bg-gradient-to-r from-purple-700 via-purple-600 to-violet-700 p-4 flex items-center gap-4">
+        <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-white/30 shadow-lg overflow-hidden flex items-center justify-center">
+          <span class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-violet-400">S</span>
+        </div>
+        <div>
+          <p class="text-white font-bold text-lg">SHDXW</p>
+          <p class="text-white/70 text-sm">Shadow Developer</p>
+        </div>
+      </div>
+
+      <!-- Main content area (two columns like XP) -->
+      <div class="flex">
+        <!-- Left column - Pinned & Recent apps -->
+        <div class="flex-1 border-r border-white/10 bg-white/5">
+          <div class="p-2">
+            <p class="text-white/40 text-xs px-2 py-1 uppercase tracking-wider">Applications</p>
+
+            <.start_menu_item
+              icon="notepad"
+              label="Notepad"
+              description="Éditeur de texte"
+              app="notepad"
+              myself={@myself}
+            />
+            <.start_menu_item
+              icon="snake"
+              label="Snake"
+              description="Jeu classique"
+              app="snake"
+              myself={@myself}
+            />
+            <.start_menu_item
+              icon="minesweeper"
+              label="Démineur"
+              description="Jeu de réflexion"
+              app="minesweeper"
+              myself={@myself}
+            />
+            <.start_menu_item
+              icon="calculator"
+              label="Calculatrice"
+              description="Calculs simples"
+              app="calculator"
+              myself={@myself}
+            />
+          </div>
+
+          <div class="border-t border-white/10 p-2">
+            <p class="text-white/40 text-xs px-2 py-1 uppercase tracking-wider">Tous les programmes</p>
+            <div class="px-2 py-2 text-white/50 text-sm flex items-center gap-2 hover:bg-white/10 rounded cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+              Plus d'applications...
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column - System shortcuts -->
+        <div class="w-36 bg-gradient-to-b from-purple-950/50 to-gray-950 p-2">
+          <.start_menu_shortcut icon="folder" label="Mes Documents" />
+          <.start_menu_shortcut icon="image" label="Mes Images" />
+          <.start_menu_shortcut icon="music" label="Ma Musique" />
+          <.start_menu_shortcut icon="computer" label="Poste de travail" />
+
+          <div class="my-2 border-t border-white/10"></div>
+
+          <.start_menu_shortcut icon="settings" label="Paramètres" />
+          <.start_menu_shortcut icon="help" label="Aide" />
+        </div>
+      </div>
+
+      <!-- Footer with shutdown button (Windows XP style) -->
+      <div class="bg-gradient-to-r from-purple-900/50 to-violet-900/50 border-t border-purple-500/30 p-2 flex justify-end gap-2">
+        <button class="flex items-center gap-2 px-3 py-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded transition-all text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Verrouiller
+        </button>
+        <button class="flex items-center gap-2 px-3 py-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded transition-all text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+          Éteindre
+        </button>
+      </div>
+    </div>
+    """
+  end
+
+  attr :icon, :string, required: true
+  attr :label, :string, required: true
+  attr :description, :string, required: true
+  attr :app, :string, required: true
+  attr :myself, :any, required: true
+
+  defp start_menu_item(assigns) do
+    ~H"""
+    <button
+      phx-click="open_app"
+      phx-value-app={@app}
+      phx-target={@myself}
+      class="w-full flex items-center gap-3 px-2 py-2 hover:bg-purple-600/30 rounded-lg transition-all group"
+    >
+      <div class="w-10 h-10 bg-gradient-to-br from-purple-600/50 to-violet-600/50 rounded-lg flex items-center justify-center border border-purple-500/30 group-hover:border-purple-500/60">
+        <.menu_icon icon={@icon} />
+      </div>
+      <div class="text-left">
+        <p class="text-white text-sm font-medium"><%= @label %></p>
+        <p class="text-white/50 text-xs"><%= @description %></p>
+      </div>
+    </button>
+    """
+  end
+
+  attr :icon, :string, required: true
+  attr :label, :string, required: true
+
+  defp start_menu_shortcut(assigns) do
+    ~H"""
+    <button class="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-white/10 rounded transition-all text-left">
+      <.shortcut_icon icon={@icon} />
+      <span class="text-white/70 text-xs"><%= @label %></span>
+    </button>
+    """
+  end
+
+  defp menu_icon(assigns) do
+    ~H"""
+    <%= case @icon do %>
+      <% "notepad" -> %>
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      <% "snake" -> %>
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      <% "minesweeper" -> %>
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      <% "calculator" -> %>
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+      <% _ -> %>
+        <div class="w-6 h-6 bg-white/20 rounded"></div>
+    <% end %>
+    """
+  end
+
+  defp shortcut_icon(assigns) do
+    ~H"""
+    <%= case @icon do %>
+      <% "folder" -> %>
+        <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+        </svg>
+      <% "image" -> %>
+        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      <% "music" -> %>
+        <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+        </svg>
+      <% "computer" -> %>
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      <% "settings" -> %>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      <% "help" -> %>
+        <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      <% _ -> %>
+        <div class="w-4 h-4 bg-white/20 rounded"></div>
+    <% end %>
+    """
+  end
+
   defp window(assigns) do
     ~H"""
     <div
       id={@window.id}
-      phx-click="focus_window"
-      phx-value-window-id={@window.id}
-      phx-target={@myself}
       class={"window absolute bg-gray-900/95 backdrop-blur-xl rounded-xl border shadow-2xl overflow-hidden transition-opacity #{if @window.minimized, do: "opacity-0 pointer-events-none", else: "opacity-100"} #{if @active, do: "border-purple-500/50", else: "border-white/20"}"}
       style={"left: #{@window.x}px; top: #{@window.y}px; width: #{@window.width}px; height: #{@window.height}px; z-index: #{@window.z_index};"}
       phx-hook="Draggable"
+      data-component-id={@component_id}
     >
       <!-- Title Bar -->
-      <div class="window-titlebar h-10 bg-black/50 flex items-center justify-between px-4 cursor-move">
-        <span class="text-white text-sm font-medium"><%= @window.title %></span>
+      <div
+        class="window-titlebar h-10 bg-black/50 flex items-center justify-between px-4 cursor-move select-none"
+        data-window-id={@window.id}
+      >
+        <span class="text-white text-sm font-medium pointer-events-none"><%= @window.title %></span>
         <div class="flex gap-2">
           <button
             phx-click="minimize_window"
@@ -584,7 +806,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       </div>
 
       <!-- Content -->
-      <div class="window-content h-[calc(100%-2.5rem)] overflow-auto">
+      <div
+        class="window-content h-[calc(100%-2.5rem)] overflow-auto"
+        phx-mousedown="focus_window"
+        phx-value-window-id={@window.id}
+        phx-target={@myself}
+      >
         <%= case @window.app do %>
           <% "notepad" -> %>
             <.notepad_app content={@notepad_content} myself={@myself} />
