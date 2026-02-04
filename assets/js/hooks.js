@@ -159,11 +159,21 @@ const ShdxwOS = {
     }
 };
 
+// Clipboard copy hook
+const Clipboard = {
+    mounted() {
+        this.handleEvent("clipboard", ({ text }) => {
+            navigator.clipboard.writeText(text);
+        });
+    }
+};
+
 let Hooks = {
     ScrollEffect: ScrollEffect,
     Draggable: Draggable,
     SnakeGame: SnakeGame,
-    ShdxwOS: ShdxwOS
+    ShdxwOS: ShdxwOS,
+    Clipboard: Clipboard
 }
 
 export { Hooks }

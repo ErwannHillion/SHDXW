@@ -1,6 +1,8 @@
 defmodule ShdxwWeb.Components.ShdxwOS do
   use ShdxwWeb, :live_component
 
+  alias ShdxwWeb.Helpers.Cipher
+
   @impl true
   def mount(socket) do
     {:ok,
@@ -9,7 +11,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      |> assign(:active_window, nil)
      |> assign(:z_index_counter, 1)
      |> assign(:start_menu_open, false)
-     |> assign(:notepad_content, "Bienvenue sur SHDXW OS!\n\nCeci est un notepad. Vous pouvez écrire ce que vous voulez ici.\n\n- Essayez le Snake!\n- Jouez au Démineur!\n- Explorez les applications...")
+     |> assign(
+       :notepad_content,
+       Cipher.decode!(
+         "ᚲᚾ᛬ᚹᚦ᛬ᚹᛉ᛬ᚹᚲ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᚲ᛬ᚷᛉ᛬ᚹᛉ᛫ᚷᚺ᛬ᚷᛉ᛬ᚷᚾ᛫ᚱᚺ᛬ᚲᚨ᛬ᚲᛊ᛬ᚱᚨ᛬ᚱᛇ᛫ᚲᚱ᛬ᚱᚺ᛬ᚨᛁ᛬ᚢᚢ᛬ᚢᚢ᛬ᚲᚺ᛬ᚹᛉ᛬ᚹᚺ᛬ᚹᚦ᛫ᚹᛉ᛬ᚷᚺ᛬ᚷᛊ᛫ᚷᛉ᛬ᚹᚲ᛫ᚹᚲ᛬ᚹᚱ᛬ᚷᛊ᛬ᚹᛉ᛬ᚷᛃ᛬ᚹᛁ᛬ᚹᛊ᛬ᚨᚲ᛫ᚱᛈ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᚺ᛫ᚷᛃ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚷᚢ᛫ᛈᚺ᛬ᛃᚦ᛬ᚹᚺ᛬ᚷᚾ᛬ᚹᚦ᛬ᚷᚾ᛬ᚹᛉ᛫ᚹᚺ᛬ᚹᛉ᛫ᚷᛁ᛬ᚷᛉ᛬ᚹᛉ᛫ᚷᛈ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᚺ᛫ᚷᛈ᛬ᚹᚱ᛬ᚷᛉ᛬ᚹᚹ᛬ᚹᛉ᛬ᚷᚢ᛫ᚹᚦ᛬ᚹᚺ᛬ᚹᚦ᛬ᚨᚲ᛬ᚲᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚹᛁ᛬ᚷᚦ᛬ᚹᛉ᛬ᚷᚢ᛫ᚹᚹ᛬ᚹᛉ᛫ᚱᚺ᛬ᚹᚲ᛬ᚹᛁ᛬ᚹᚠ᛬ᚹᛉ᛬ᚨᛁ᛫ᚲᚢ᛬ᚹᚱ᛬ᚷᛉ᛬ᚹᛉ᛬ᚷᚢ᛫ᚹᛁ᛬ᚷᛉ᛫ᚲᛊ᛬ᛈᚺ᛬ᛃᚦ᛬ᚹᚷ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛉ᛬ᚷᛉ᛬ᚷᚾ᛬ᚨᛁ᛫ᚲᛉ᛬ᚷᚨ᛬ᚷᛃ᛬ᚹᚹ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚢ᛫ᚹᚹ᛬ᚹᛉ᛬ᚷᚺ᛫ᚹᛁ᛬ᚷᛃ᛬ᚷᛃ᛬ᚹᚹ᛬ᚹᚦ᛬ᚹᚺ᛬ᚹᛁ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛬ᚷᚺ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ"
+       )
+     )
      |> assign(:snake_game, init_snake_game())
      |> assign(:minesweeper_game, init_minesweeper_game())
      |> assign(:calculator_display, "0")
@@ -48,17 +55,20 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
   defp generate_minesweeper_board(size, mine_count) do
     # Generate random mine positions
-    all_positions = for x <- 0..(size-1), y <- 0..(size-1), do: {x, y}
+    all_positions = for x <- 0..(size - 1), y <- 0..(size - 1), do: {x, y}
     mine_positions = Enum.take_random(all_positions, mine_count) |> MapSet.new()
 
     # Create board with mine counts
-    for x <- 0..(size-1), y <- 0..(size-1), into: %{} do
+    for x <- 0..(size - 1), y <- 0..(size - 1), into: %{} do
       is_mine = MapSet.member?(mine_positions, {x, y})
-      adjacent_mines = if is_mine do
-        -1
-      else
-        count_adjacent_mines({x, y}, mine_positions, size)
-      end
+
+      adjacent_mines =
+        if is_mine do
+          -1
+        else
+          count_adjacent_mines({x, y}, mine_positions, size)
+        end
+
       {{x, y}, %{mine: is_mine, adjacent: adjacent_mines}}
     end
   end
@@ -114,7 +124,9 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
   def handle_event("close_window", %{"window-id" => window_id}, socket) do
     windows = Map.delete(socket.assigns.windows, window_id)
-    active = if socket.assigns.active_window == window_id, do: nil, else: socket.assigns.active_window
+
+    active =
+      if socket.assigns.active_window == window_id, do: nil, else: socket.assigns.active_window
 
     {:noreply,
      socket
@@ -153,11 +165,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
   # Snake events
   def handle_event("snake_start", _, socket) do
-    snake_game = if socket.assigns.snake_game.game_over do
-      init_snake_game() |> Map.put(:running, true)
-    else
-      socket.assigns.snake_game |> Map.put(:running, true)
-    end
+    snake_game =
+      if socket.assigns.snake_game.game_over do
+        init_snake_game() |> Map.put(:running, true)
+      else
+        socket.assigns.snake_game |> Map.put(:running, true)
+      end
 
     {:noreply,
      socket
@@ -179,12 +192,13 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     [head | _] = game.snake
     {hx, hy} = head
 
-    new_head = case game.direction do
-      :up -> {hx, hy - 1}
-      :down -> {hx, hy + 1}
-      :left -> {hx - 1, hy}
-      :right -> {hx + 1, hy}
-    end
+    new_head =
+      case game.direction do
+        :up -> {hx, hy - 1}
+        :down -> {hx, hy + 1}
+        :left -> {hx - 1, hy}
+        :right -> {hx + 1, hy}
+      end
 
     {nx, ny} = new_head
     grid = game.grid_size
@@ -225,13 +239,14 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     new_direction = String.to_atom(direction)
 
     # Prevent 180 degree turns
-    valid_change = case {snake_game.direction, new_direction} do
-      {:up, :down} -> false
-      {:down, :up} -> false
-      {:left, :right} -> false
-      {:right, :left} -> false
-      _ -> true
-    end
+    valid_change =
+      case {snake_game.direction, new_direction} do
+        {:up, :down} -> false
+        {:down, :up} -> false
+        {:left, :right} -> false
+        {:right, :left} -> false
+        _ -> true
+      end
 
     if valid_change do
       {:noreply, assign(socket, :snake_game, %{snake_game | direction: new_direction})}
@@ -249,8 +264,10 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     cond do
       game.game_over or game.won ->
         {:noreply, socket}
+
       MapSet.member?(game.flagged, {x, y}) ->
         {:noreply, socket}
+
       true ->
         game = reveal_cell(game, {x, y})
         {:noreply, assign(socket, :minesweeper_game, game)}
@@ -265,12 +282,17 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     cond do
       game.game_over or game.won ->
         {:noreply, socket}
+
       MapSet.member?(game.revealed, {x, y}) ->
         {:noreply, socket}
+
       MapSet.member?(game.flagged, {x, y}) ->
-        {:noreply, assign(socket, :minesweeper_game, %{game | flagged: MapSet.delete(game.flagged, {x, y})})}
+        {:noreply,
+         assign(socket, :minesweeper_game, %{game | flagged: MapSet.delete(game.flagged, {x, y})})}
+
       true ->
-        {:noreply, assign(socket, :minesweeper_game, %{game | flagged: MapSet.put(game.flagged, {x, y})})}
+        {:noreply,
+         assign(socket, :minesweeper_game, %{game | flagged: MapSet.put(game.flagged, {x, y})})}
     end
   end
 
@@ -280,11 +302,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
   # Calculator events
   def handle_event("calc_digit", %{"digit" => digit}, socket) do
-    display = if socket.assigns.calculator_new_number do
-      digit
-    else
-      socket.assigns.calculator_display <> digit
-    end
+    display =
+      if socket.assigns.calculator_new_number do
+        digit
+      else
+        socket.assigns.calculator_display <> digit
+      end
 
     {:noreply,
      socket
@@ -295,11 +318,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   def handle_event("calc_operation", %{"op" => op}, socket) do
     current = parse_number(socket.assigns.calculator_display)
 
-    result = if socket.assigns.calculator_memory && socket.assigns.calculator_operation do
-      calculate(socket.assigns.calculator_memory, current, socket.assigns.calculator_operation)
-    else
-      current
-    end
+    result =
+      if socket.assigns.calculator_memory && socket.assigns.calculator_operation do
+        calculate(socket.assigns.calculator_memory, current, socket.assigns.calculator_operation)
+      else
+        current
+      end
 
     {:noreply,
      socket
@@ -312,7 +336,9 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   def handle_event("calc_equals", _, socket) do
     if socket.assigns.calculator_memory && socket.assigns.calculator_operation do
       current = parse_number(socket.assigns.calculator_display)
-      result = calculate(socket.assigns.calculator_memory, current, socket.assigns.calculator_operation)
+
+      result =
+        calculate(socket.assigns.calculator_memory, current, socket.assigns.calculator_operation)
 
       {:noreply,
        socket
@@ -336,11 +362,13 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
   def handle_event("calc_decimal", _, socket) do
     display = socket.assigns.calculator_display
-    display = if socket.assigns.calculator_new_number do
-      "0."
-    else
-      if String.contains?(display, "."), do: display, else: display <> "."
-    end
+
+    display =
+      if socket.assigns.calculator_new_number do
+        "0."
+      else
+        if String.contains?(display, "."), do: display, else: display <> "."
+      end
 
     {:noreply,
      socket
@@ -420,12 +448,15 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   defp format_number(num) when is_float(num) do
     if num == trunc(num), do: "#{trunc(num)}", else: "#{num}"
   end
+
   defp format_number(num), do: "#{num}"
 
   defp update_window_z_index(socket, window_id) do
-    windows = update_in(socket.assigns.windows, [window_id, :z_index], fn _ ->
-      socket.assigns.z_index_counter
-    end)
+    windows =
+      update_in(socket.assigns.windows, [window_id, :z_index], fn _ ->
+        socket.assigns.z_index_counter
+      end)
+
     assign(socket, :windows, windows)
   end
 
@@ -465,17 +496,21 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id={@id} class="os-container relative w-full h-[700px] bg-gradient-to-br from-gray-900 via-purple-950/50 to-gray-900 rounded-2xl border border-purple-500/30 overflow-hidden">
+    <div
+      id={@id}
+      class="os-container relative w-full h-[700px] bg-gradient-to-br from-gray-900 via-purple-950/50 to-gray-900 rounded-2xl border border-purple-500/30 overflow-hidden"
+    >
       <!-- Click overlay to close start menu -->
       <%= if @start_menu_open do %>
         <div
           class="absolute inset-0 z-40"
           phx-click="close_start_menu"
           phx-target={@myself}
-        ></div>
+        >
+        </div>
       <% end %>
-
-      <!-- Desktop -->
+      
+    <!-- Desktop -->
       <div class="desktop absolute inset-0 p-6 pb-16" phx-hook="ShdxwOS" id={"#{@id}-desktop"}>
         <!-- Desktop Icons -->
         <div class="grid grid-cols-6 gap-4">
@@ -484,8 +519,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <.desktop_icon icon="minesweeper" label="Démineur" target={@myself} />
           <.desktop_icon icon="calculator" label="Calculatrice" target={@myself} />
         </div>
-
-        <!-- Windows -->
+        
+    <!-- Windows -->
         <%= for {window_id, window} <- @windows do %>
           <.window
             window={window}
@@ -499,11 +534,11 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           />
         <% end %>
       </div>
-
-      <!-- Start Menu (Windows XP Style) -->
+      
+    <!-- Start Menu (Windows XP Style) -->
       <.start_menu :if={@start_menu_open} myself={@myself} />
-
-      <!-- Taskbar -->
+      
+    <!-- Taskbar -->
       <div class="taskbar absolute bottom-0 left-0 right-0 h-14 bg-black/80 backdrop-blur-xl border-t border-purple-500/30 flex items-center px-4 gap-2 z-50">
         <!-- Start Button -->
         <button
@@ -518,8 +553,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         </button>
 
         <div class="h-8 w-px bg-white/20 mx-2"></div>
-
-        <!-- Open Windows -->
+        
+    <!-- Open Windows -->
         <div class="flex gap-2 flex-1">
           <%= for {window_id, window} <- @windows do %>
             <button
@@ -528,14 +563,14 @@ defmodule ShdxwWeb.Components.ShdxwOS do
               phx-target={@myself}
               class={"px-4 py-2 rounded-lg text-white text-sm transition-all #{if @active_window == window_id and not window.minimized, do: "bg-purple-600/50 border border-purple-500/50", else: "bg-white/10 hover:bg-white/20"}"}
             >
-              <%= window.title %>
+              {window.title}
             </button>
           <% end %>
         </div>
-
-        <!-- Clock -->
+        
+    <!-- Clock -->
         <div class="text-white/60 text-sm font-mono">
-          <%= Calendar.strftime(DateTime.utc_now(), "%H:%M") %>
+          {Calendar.strftime(DateTime.utc_now(), "%H:%M")}
         </div>
       </div>
     </div>
@@ -554,30 +589,40 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         <%= case @icon do %>
           <% "notepad" -> %>
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           <% "snake" -> %>
             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
             </svg>
           <% "minesweeper" -> %>
             <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-              <circle cx="12" cy="12" r="3"/>
-              <line x1="12" y1="2" x2="12" y2="6" stroke="currentColor" stroke-width="2"/>
-              <line x1="12" y1="18" x2="12" y2="22" stroke="currentColor" stroke-width="2"/>
-              <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" stroke-width="2"/>
-              <line x1="18" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/>
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" />
+              <circle cx="12" cy="12" r="3" />
+              <line x1="12" y1="2" x2="12" y2="6" stroke="currentColor" stroke-width="2" />
+              <line x1="12" y1="18" x2="12" y2="22" stroke="currentColor" stroke-width="2" />
+              <line x1="2" y1="12" x2="6" y2="12" stroke="currentColor" stroke-width="2" />
+              <line x1="18" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2" />
             </svg>
           <% "calculator" -> %>
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              />
             </svg>
           <% _ -> %>
             <div class="w-8 h-8 bg-white/20 rounded"></div>
         <% end %>
       </div>
-      <span class="text-white text-xs font-medium drop-shadow-lg"><%= @label %></span>
+      <span class="text-white text-xs font-medium drop-shadow-lg">{@label}</span>
     </button>
     """
   end
@@ -588,15 +633,17 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       <!-- Header with user profile (Windows XP style) -->
       <div class="bg-gradient-to-r from-purple-700 via-purple-600 to-violet-700 p-4 flex items-center gap-4">
         <div class="w-16 h-16 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-white/30 shadow-lg overflow-hidden flex items-center justify-center">
-          <span class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-violet-400">S</span>
+          <span class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-violet-400">
+            S
+          </span>
         </div>
         <div>
           <p class="text-white font-bold text-lg">SHDXW</p>
           <p class="text-white/70 text-sm">Shadow Developer</p>
         </div>
       </div>
-
-      <!-- Main content area (two columns like XP) -->
+      
+    <!-- Main content area (two columns like XP) -->
       <div class="flex">
         <!-- Left column - Pinned & Recent apps -->
         <div class="flex-1 border-r border-white/10 bg-white/5">
@@ -634,17 +681,24 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           </div>
 
           <div class="border-t border-white/10 p-2">
-            <p class="text-white/40 text-xs px-2 py-1 uppercase tracking-wider">Tous les programmes</p>
+            <p class="text-white/40 text-xs px-2 py-1 uppercase tracking-wider">
+              Tous les programmes
+            </p>
             <div class="px-2 py-2 text-white/50 text-sm flex items-center gap-2 hover:bg-white/10 rounded cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
               Plus d'applications...
             </div>
           </div>
         </div>
-
-        <!-- Right column - System shortcuts -->
+        
+    <!-- Right column - System shortcuts -->
         <div class="w-36 bg-gradient-to-b from-purple-950/50 to-gray-950 p-2">
           <.start_menu_shortcut icon="folder" label="Mes Documents" />
           <.start_menu_shortcut icon="image" label="Mes Images" />
@@ -657,18 +711,28 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <.start_menu_shortcut icon="help" label="Aide" />
         </div>
       </div>
-
-      <!-- Footer with shutdown button (Windows XP style) -->
+      
+    <!-- Footer with shutdown button (Windows XP style) -->
       <div class="bg-gradient-to-r from-purple-900/50 to-violet-900/50 border-t border-purple-500/30 p-2 flex justify-end gap-2">
         <button class="flex items-center gap-2 px-3 py-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded transition-all text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
           </svg>
           Verrouiller
         </button>
         <button class="flex items-center gap-2 px-3 py-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded transition-all text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+            />
           </svg>
           Éteindre
         </button>
@@ -695,8 +759,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         <.menu_icon icon={@icon} />
       </div>
       <div class="text-left">
-        <p class="text-white text-sm font-medium"><%= @label %></p>
-        <p class="text-white/50 text-xs"><%= @description %></p>
+        <p class="text-white text-sm font-medium">{@label}</p>
+        <p class="text-white/50 text-xs">{@description}</p>
       </div>
     </button>
     """
@@ -709,7 +773,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     ~H"""
     <button class="w-full flex items-center gap-2 px-2 py-1.5 hover:bg-white/10 rounded transition-all text-left">
       <.shortcut_icon icon={@icon} />
-      <span class="text-white/70 text-xs"><%= @label %></span>
+      <span class="text-white/70 text-xs">{@label}</span>
     </button>
     """
   end
@@ -719,20 +783,45 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     <%= case @icon do %>
       <% "notepad" -> %>
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
         </svg>
       <% "snake" -> %>
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
       <% "minesweeper" -> %>
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
         </svg>
       <% "calculator" -> %>
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+          />
         </svg>
       <% _ -> %>
         <div class="w-6 h-6 bg-white/20 rounded"></div>
@@ -745,28 +834,58 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     <%= case @icon do %>
       <% "folder" -> %>
         <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+          <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
         </svg>
       <% "image" -> %>
         <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
         </svg>
       <% "music" -> %>
         <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+          />
         </svg>
       <% "computer" -> %>
         <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
         </svg>
       <% "settings" -> %>
         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       <% "help" -> %>
         <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
       <% _ -> %>
         <div class="w-4 h-4 bg-white/20 rounded"></div>
@@ -788,24 +907,26 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         class="window-titlebar h-10 bg-black/50 flex items-center justify-between px-4 cursor-move select-none"
         data-window-id={@window.id}
       >
-        <span class="text-white text-sm font-medium pointer-events-none"><%= @window.title %></span>
+        <span class="text-white text-sm font-medium pointer-events-none">{@window.title}</span>
         <div class="flex gap-2">
           <button
             phx-click="minimize_window"
             phx-value-window-id={@window.id}
             phx-target={@myself}
             class="w-4 h-4 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"
-          ></button>
+          >
+          </button>
           <button
             phx-click="close_window"
             phx-value-window-id={@window.id}
             phx-target={@myself}
             class="w-4 h-4 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
-          ></button>
+          >
+          </button>
         </div>
       </div>
-
-      <!-- Content -->
+      
+    <!-- Content -->
       <div
         class="window-content h-[calc(100%-2.5rem)] overflow-auto"
         phx-mousedown="focus_window"
@@ -850,7 +971,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     ~H"""
     <div class="h-full flex flex-col items-center justify-center p-4 bg-gray-950">
       <div class="mb-4 flex items-center gap-4">
-        <span class="text-white font-bold">Score: <%= @game.score %></span>
+        <span class="text-white font-bold">Score: {@game.score}</span>
         <%= if @game.game_over do %>
           <span class="text-red-500 font-bold">GAME OVER!</span>
         <% end %>
@@ -870,13 +991,15 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <div
             class="absolute bg-gradient-to-br from-green-500 to-green-600 rounded-sm"
             style={"left: #{x * 20}px; top: #{y * 20}px; width: 18px; height: 18px;"}
-          ></div>
+          >
+          </div>
         <% end %>
 
         <div
           class="absolute bg-red-500 rounded-full animate-pulse"
           style={"left: #{elem(@game.food, 0) * 20 + 2}px; top: #{elem(@game.food, 1) * 20 + 2}px; width: 14px; height: 14px;"}
-        ></div>
+        >
+        </div>
       </div>
 
       <div class="mt-4 flex gap-2">
@@ -886,7 +1009,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
             phx-target={@myself}
             class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
           >
-            <%= if @game.game_over, do: "Rejouer", else: "Démarrer" %>
+            {if @game.game_over, do: "Rejouer", else: "Démarrer"}
           </button>
         <% end %>
         <button
@@ -909,7 +1032,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     ~H"""
     <div class="h-full flex flex-col items-center p-4 bg-gray-950">
       <div class="mb-4 flex items-center gap-4">
-        <span class="text-white font-bold">Mines: <%= @game.mines - MapSet.size(@game.flagged) %></span>
+        <span class="text-white font-bold">Mines: {@game.mines - MapSet.size(@game.flagged)}</span>
         <%= if @game.game_over do %>
           <span class="text-red-500 font-bold">BOOM!</span>
         <% end %>
@@ -945,7 +1068,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
                   <% revealed and cell.mine -> %>
                     <span>💣</span>
                   <% revealed and cell.adjacent > 0 -> %>
-                    <span class={"#{get_number_color(cell.adjacent)}"}><%= cell.adjacent %></span>
+                    <span class={"#{get_number_color(cell.adjacent)}"}>{cell.adjacent}</span>
                   <% true -> %>
                     <span></span>
                 <% end %>
@@ -993,11 +1116,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
   slot :inner_block, required: true
 
   defp calc_btn(assigns) do
-    event_value = case assigns.click do
-      "calc_digit" -> [{"phx-value-digit", assigns.value}]
-      "calc_operation" -> [{"phx-value-op", assigns.value}]
-      _ -> []
-    end
+    event_value =
+      case assigns.click do
+        "calc_digit" -> [{"phx-value-digit", assigns.value}]
+        "calc_operation" -> [{"phx-value-op", assigns.value}]
+        _ -> []
+      end
 
     assigns = assign(assigns, :event_value, event_value)
 
@@ -1008,7 +1132,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       {@event_value}
       class={"text-white text-xl font-semibold rounded-lg py-3 transition-all bg-white/10 hover:bg-white/20 #{@class}"}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -1019,30 +1143,66 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       <!-- Display -->
       <div class="bg-gray-800 rounded-lg p-4 mb-4">
         <div class="text-right text-white text-3xl font-mono overflow-hidden">
-          <%= @display %>
+          {@display}
         </div>
       </div>
-
-      <!-- Buttons -->
+      
+    <!-- Buttons -->
       <div class="grid grid-cols-4 gap-2 flex-1">
-        <.calc_btn click="calc_clear" myself={@myself} class="bg-red-600 hover:bg-red-700 col-span-2">AC</.calc_btn>
-        <.calc_btn click="calc_operation" value="/" myself={@myself} class="bg-purple-600 hover:bg-purple-700">÷</.calc_btn>
-        <.calc_btn click="calc_operation" value="*" myself={@myself} class="bg-purple-600 hover:bg-purple-700">×</.calc_btn>
+        <.calc_btn click="calc_clear" myself={@myself} class="bg-red-600 hover:bg-red-700 col-span-2">
+          AC
+        </.calc_btn>
+        <.calc_btn
+          click="calc_operation"
+          value="/"
+          myself={@myself}
+          class="bg-purple-600 hover:bg-purple-700"
+        >
+          ÷
+        </.calc_btn>
+        <.calc_btn
+          click="calc_operation"
+          value="*"
+          myself={@myself}
+          class="bg-purple-600 hover:bg-purple-700"
+        >
+          ×
+        </.calc_btn>
 
         <.calc_btn click="calc_digit" value="7" myself={@myself}>7</.calc_btn>
         <.calc_btn click="calc_digit" value="8" myself={@myself}>8</.calc_btn>
         <.calc_btn click="calc_digit" value="9" myself={@myself}>9</.calc_btn>
-        <.calc_btn click="calc_operation" value="-" myself={@myself} class="bg-purple-600 hover:bg-purple-700">−</.calc_btn>
+        <.calc_btn
+          click="calc_operation"
+          value="-"
+          myself={@myself}
+          class="bg-purple-600 hover:bg-purple-700"
+        >
+          −
+        </.calc_btn>
 
         <.calc_btn click="calc_digit" value="4" myself={@myself}>4</.calc_btn>
         <.calc_btn click="calc_digit" value="5" myself={@myself}>5</.calc_btn>
         <.calc_btn click="calc_digit" value="6" myself={@myself}>6</.calc_btn>
-        <.calc_btn click="calc_operation" value="+" myself={@myself} class="bg-purple-600 hover:bg-purple-700">+</.calc_btn>
+        <.calc_btn
+          click="calc_operation"
+          value="+"
+          myself={@myself}
+          class="bg-purple-600 hover:bg-purple-700"
+        >
+          +
+        </.calc_btn>
 
         <.calc_btn click="calc_digit" value="1" myself={@myself}>1</.calc_btn>
         <.calc_btn click="calc_digit" value="2" myself={@myself}>2</.calc_btn>
         <.calc_btn click="calc_digit" value="3" myself={@myself}>3</.calc_btn>
-        <.calc_btn click="calc_equals" myself={@myself} class="bg-green-600 hover:bg-green-700 row-span-2">=</.calc_btn>
+        <.calc_btn
+          click="calc_equals"
+          myself={@myself}
+          class="bg-green-600 hover:bg-green-700 row-span-2"
+        >
+          =
+        </.calc_btn>
 
         <.calc_btn click="calc_digit" value="0" myself={@myself} class="col-span-2">0</.calc_btn>
         <.calc_btn click="calc_decimal" myself={@myself}>.</.calc_btn>
