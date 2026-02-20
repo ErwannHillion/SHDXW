@@ -22,7 +22,14 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      |> assign(:calculator_display, "0")
      |> assign(:calculator_memory, nil)
      |> assign(:calculator_operation, nil)
-     |> assign(:calculator_new_number, true)}
+     |> assign(:calculator_new_number, true)
+     |> assign(
+       :warez_content,
+       Cipher.decode!(
+         "ᚢᚢ᛬ᚱᚠ᛫ᚱᛇ᛬ᚲᛁ᛬ᚱᚾ᛬ᚲᛉ᛬ᚱᚢ᛫ᚱᛊ᛬ᚲᛉ᛬ᚱᚾ᛬ᚲᚷ᛬ᚲᚦ᛬ᚲᚲ᛬ᚲᛁ᛬ᚲᚹ᛫ᚷᛈ᛬ᚦᛃ᛬ᚨᚲ᛬ᚦᛇ᛬ᚨᚲ᛬ᚦᚺ᛫ᚱᚷ᛬ᚢᚢ᛬ᚱᚠ᛫ᚲᚺ᛬ᚲᚱ᛬ᚲᚲ᛬ᚲᚲ᛬ᚲᛉ᛬ᚲᚺ᛬ᚱᛊ᛬ᚲᚦ᛬ᚲᚱ᛬ᚲᚲ᛫ᚲᛉ᛬ᚱᚺ᛬ᚱᛊ᛬ᚲᛁ᛬ᚲᚾ᛬ᚲᚹ᛬ᚲᚦ᛬ᚱᚺ᛬ᚲᚨ᛬ᚲᛉ᛬ᚲᛊ᛫ᚱᚷ᛬ᚢᚢ᛬ᚱᚠ᛫ᚲᛉ᛬ᚲᚲ᛬ᚲᚺ᛬ᚱᚾ᛬ᚱᚦ᛬ᚱᛃ᛬ᚱᛊ᛬ᚲᛉ᛬ᚲᛊ᛫ᚲᚺ᛬ᚲᚨ᛬ᚲᛁ᛬ᚲᚲ᛬ᚲᚲ᛬ᚲᛉ᛬ᚲᚹ᛫ᚲᛁ᛬ᚲᚺ᛬ᚱᛊ᛬ᚲᚦ᛬ᚱᛈ᛬ᚲᛉ᛫ᚱᚷ᛬ᚢᚢ᛬ᚦᚲ᛫ᚱᛇ᛬ᚹᛉ᛬ᚹᚹ᛬ᚹᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᛉ᛫ᚷᛊ᛬ᚹᚱ᛫ᚱᚺ᛬ᚲᚨ᛬ᚲᛊ᛬ᚱᚨ᛬ᚱᛇ᛬ᚨᛇ᛬ᚷᚺ᛫ᚲᚲ᛬ᚹᛉ᛬ᚷᛊ᛬ᚷᛇ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᚠ᛬ᚢᚢ᛬ᚦᚲ᛫ᚱᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚷᚺ᛫ᚷᛊ᛬ᚹᛉ᛬ᚷᚾ᛬ᚹᚷ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛁ᛬ᚹᚹ᛫ᚹᚦ᛬ᚷᚺ᛫ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚹᛉ᛬ᚷᚾ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᛊ᛫ᚹᛈ᛬ᚹᚱ᛬ᚷᚾ᛫ᚹᛁ᛬ᚷᛉ᛬ᚷᛊ᛬ᚹᚨ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᚦ᛬ᚷᚢ᛬ᚹᛉ᛬ᚹᛊ᛫ᚹᚱ᛬ᚷᛃ᛬ᚹᛉ᛬ᚷᚾ᛬ᚹᛁ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚷᚺ᛬ᚨᚲ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᛁ᛬ᚹᚲ᛬ᚷᚦ᛫ᚷᛉ᛬ᚹᚲ᛬ᚹᛁ᛬ᚷᛉ᛬ᚷᛊ᛬ᚹᚨ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᚦ᛬ᚷᚢ᛬ᚹᛉ᛬ᚹᛊ᛫ᚹᛁ᛬ᚹᚺ᛬ᚹᚺ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛫ᚹᛁ᛬ᚷᛊ᛬ᚷᛊ᛬ᚹᛉ᛬ᚹᚷ᛬ᚷᛃ᛬ᚷᛊ᛫ᚷᛇ᛬ᚹᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᚾ᛬ᚹᛉ᛫ᚷᛊ᛬ᚷᚾ᛬ᚹᛁ᛬ᚹᚺ᛬ᚹᛉ᛬ᚹᛊ᛬ᚨᚲ᛬ᚢᚢ᛬ᚢᚢ᛬ᚨᚷ᛬ᚨᚷ᛬ᚨᚷ᛬ᚢᚢ᛬ᚢᚢ᛬ᚱᚺ᛬ᚱᛊ᛬ᚲᛁ᛬ᚱᛊ᛬ᚱᛉ᛬ᚱᚺ᛬ᚦᚢ᛫ᚲᚱ᛬ᚲᚲ᛬ᚲᚹ᛬ᚲᚦ᛬ᚲᚲ᛬ᚲᛉ᛬ᚢᚢ᛬ᚲᚲ᛬ᚲᚱ᛬ᚲᛊ᛬ᚲᛉ᛬ᚦᚢ᛫ᚷᚺ᛬ᚹᚨ᛬ᚹᛊ᛬ᚷᚨ᛬ᚷᛇ᛬ᚨᚷ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᚹ᛬ᚹᛁ᛬ᚷᚦ᛬ᚨᚷ᛬ᚦᛃ᛬ᚦᛇ᛬ᚢᚢ᛬ᚱᛃ᛬ᚱᚾ᛬ᚲᚱ᛬ᚱᛊ᛬ᚲᚱ᛬ᚲᚺ᛬ᚲᚱ᛬ᚲᚹ᛬ᚦᚢ᛫ᚲᚷ᛬ᚱᛊ᛬ᚲᚾ᛬ᚨᚷ᛬ᚲᚺ᛬ᚲᚦ᛬ᚱᛃ᛬ᚲᚨ᛬ᚲᛉ᛬ᚱᚾ᛬ᚨᚱ᛬ᚷᛈ᛬ᚦᚾ᛬ᚢᚢ᛬ᚲᚹ᛬ᚲᛁ᛬ᚱᛊ᛬ᚲᛉ᛬ᚲᚲ᛬ᚲᚺ᛬ᚱᚦ᛬ᚦᚢ᛫ᚦᚾ᛬ᚦᛇ᛬ᚹᚷ᛬ᚷᚺ᛬ᚢᚢ᛬ᚱᛉ᛬ᚱᚺ᛬ᚲᛉ᛬ᚱᚾ᛬ᚦᚢ᛫ᚱᚺ᛬ᚹᚺ᛬ᚹᚱ᛬ᚷᛊ᛬ᚷᛊ᛬ᚢᚢ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᛁ᛬ᚷᚾ᛬ᚹᛉ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᚺ᛬ᚷᛉ᛬ᚷᚾ᛬ᚹᛉ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᛇ᛬ᚹᛁ᛬ᚹᚲ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚱ᛫ᚹᛇ᛬ᚹᚱ᛫ᚷᛊ᛬ᚹᚨ᛬ᚷᚾ᛬ᚹᚱ᛬ᚷᛉ᛬ᚹᛇ᛬ᚹᚨ᛫ᚷᛇ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᚨ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚷᚺ᛬ᚦᚱ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚷ᛫ᚹᚢ᛬ᚷᛉ᛬ᚷᚺ᛬ᚷᛊ᛫ᚷᚺ᛬ᚹᛁ᛬ᚷᚦ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛬ᚨᚹ᛫ᚲᚦ᛫ᚷᛇ᛬ᚹᛁ᛬ᚷᚺ᛫ᚹᚺ᛬ᚷᛉ᛬ᚷᚾ᛬ᚹᚦ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᚺ᛫ᚷᛊ᛬ᚹᚱ᛬ᚹᚱ᛬ᚨᚹ᛫ᚹᚾ᛬ᚷᛉ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚦ᛫ᚹᚷ᛬ᚹᛁ᛬ᚹᛊ᛬ᚹᛉ᛫ᚹᚷ᛬ᚹᛉ᛫ᚷᚾ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᚹ᛬ᚹᚦ᛬ᚷᚢ᛬ᚹᛉ᛫ᚷᛃ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᛊ᛬ᚷᛊ᛬ᚷᚦ᛫ᚹᛈ᛬ᚹᛁ᛬ᚷᚺ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛫ᚲᚦ᛫ᚷᛇ᛬ᚹᛁ᛬ᚷᚺ᛫ᚹᛇ᛬ᚹᚱ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚷᛊ᛬ᚹᚱ᛬ᚹᚱ᛫ᚹᛈ᛬ᚹᛁ᛬ᚷᚾ᛬ᚨᚲ᛫ᚱᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᛉ᛬ᚹᚹ᛬ᚷᛊ᛫ᚹᚦ᛬ᚷᚺ᛬ᚦᚢ᛫ᚲᚦ᛫ᚹᛁ᛬ᚹᚷ᛫ᚷᛇ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚾ᛬ᚹᛉ᛫ᚲᚦ᛫ᚹᛁ᛬ᚹᚷ᛫ᚷᛊ᛬ᚹᚱ᛬ᚹᛊ᛬ᚹᛁ᛬ᚷᚦ᛬ᚨᚹ᛫ᚷᛇ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᚨ᛫ᚹᛁ᛫ᚹᚨ᛬ᚹᛉ᛬ᚹᛁ᛬ᚷᛈ᛬ᚷᚦ᛫ᚷᚺ᛬ᚹᛉ᛬ᚹᚺ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᛊ᛫ᚲᚦ᛫ᚹᚠ᛬ᚹᛉ᛬ᚹᛉ᛬ᚷᛃ᛫ᚹᛊ᛬ᚹᛉ᛬ᚹᛉ᛬ᚷᛃ᛫ᚹᚦ᛬ᚹᚲ᛬ᚷᚺ᛬ᚹᚦ᛬ᚹᛊ᛬ᚹᛉ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᛊ᛬ᚹᛁ᛬ᚹᚲ᛬ᚹᛊ᛫ᚹᚦ᛬ᚹᛈ᛫ᚲᚦ᛫ᚷᚾ᛬ᚹᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᚹ᛫ᚹᚦ᛬ᚷᛊ᛬ᚨᚹ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᛈ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛊ᛫ᚹᚷ᛬ᚹᛉ᛬ᚨᚲ᛫ᚲᚦ᛫ᚹᛊ᛬ᚹᚦ᛬ᚹᛊ᛬ᚹᚲ᛬ᚨᛇ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᚠ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚦ᛫ᚷᛇ᛬ᚹᛉ᛬ᚷᚾ᛬ᚹᛉ᛫ᚹᚺ᛬ᚹᛁ᛬ᚷᛃ᛬ᚹᛁ᛬ᚹᚾ᛬ᚹᚹ᛬ᚹᛉ᛫ᚹᚱ᛬ᚹᛈ᛫ᚹᚦ᛬ᚷᛊ᛬ᚨᚹ᛫ᚹᚾ᛬ᚷᛉ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚦ᛫ᚹᛁ᛬ᚷᚾ᛬ᚹᛉ᛫ᚹᚷ᛬ᚷᛉ᛬ᚹᚺ᛬ᚹᚨ᛫ᚷᚺ᛬ᚷᛊ᛬ᚷᚾ᛬ᚹᚱ᛬ᚹᚲ᛬ᚹᛇ᛬ᚹᛉ᛬ᚷᚾ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛁ᛬ᚹᚲ᛫ᚲᚦ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚱ᛬ᚷᛉ᛬ᚹᛇ᛬ᚹᚨ᛬ᚷᛊ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛬ᚢᚢ᛬ᚢᚢ᛬ᚦᚲ᛫ᚦᛃ᛬ᚦᚨ᛬ᚨᚱ᛬ᚦᛁ᛬ᚦᛊ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᛃ᛬ᚦᛁ᛬ᚦᚨ᛫ᚱᚠ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛊ᛫ᚷᚺ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛬ᚱᚷ᛬ᚢᚢ᛬ᚦᚲ᛫ᚱᛇ᛬ᚹᚨ᛬ᚹᛉ᛬ᚹᚲ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᚠ᛫ᚹᛁ᛬ᚹᚾ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᛊ᛫ᚹᚦ᛬ᚷᛊ᛬ᚨᚹ᛫ᚲᛉ᛬ᚲᚷ᛬ᚱᛃ᛬ᚱᚾ᛬ᚲᛉ᛬ᚱᚺ᛬ᚱᚺ᛫ᚹᚦ᛬ᚷᚺ᛬ᚹᚲ᛬ᚨᛇ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛫ᚹᚺ᛬ᚷᚾ᛬ᚹᛁ᛬ᚷᚢ᛬ᚷᚦ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚱᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚷᛃ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚷᛉ᛬ᚷᚾ᛬ᚹᛉ᛫ᚹᛈ᛬ᚷᚾ᛬ᚹᚱ᛬ᚹᚷ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᚨ᛬ᚹᛉ᛬ᚹᛁ᛬ᚷᛈ᛬ᚷᚦ᛫ᚹᚨ᛬ᚹᚦ᛬ᚷᛊ᛬ᚷᛊ᛬ᚹᛉ᛬ᚷᚾ᛬ᚷᚺ᛫ᚹᚷ᛬ᚹᛁ᛬ᚹᛊ᛬ᚹᛉ᛫ᚹᚨ᛬ᚹᛉ᛬ᚷᚾ᛫ᚹᚺ᛬ᚷᚾ᛬ᚹᛁ᛬ᚹᚺ᛬ᚹᚠ᛬ᚨᚲ᛫ᚲᚦ᛫ᚹᚨ᛬ᚹᚱ᛬ᚷᛃ᛬ᚹᛉ᛫ᚷᚺ᛬ᚹᚨ᛬ᚹᛉ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᚺ᛬ᚹᚱ᛬ᚹᚲ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚲ᛬ᚷᛉ᛬ᚹᛉ᛫ᚷᛊ᛬ᚹᚱ᛫ᚹᛊ᛬ᚹᚱ᛫ᚷᛇ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛫ᚷᚺ᛬ᚹᚨ᛬ᚹᛉ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᚺ᛫ᚹᛁ᛬ᚹᚹ᛬ᚷᛇ᛬ᚹᛁ᛬ᚷᚦ᛬ᚷᚺ᛫ᚹᚠ᛬ᚹᚲ᛬ᚹᚱ᛬ᚷᛇ᛬ᚹᚲ᛫ᚹᚨ᛬ᚹᚱ᛬ᚷᛇ᛫ᚷᛊ᛬ᚹᚱ᛫ᚹᛊ᛬ᚹᚱ᛫ᚹᚦ᛬ᚹᚲ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᛈ᛬ᚷᛉ᛬ᚷᛊ᛬ᚷᛉ᛬ᚷᚾ᛬ᚹᛉ᛬ᚨᚲ᛫ᚱᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᛉ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚷ᛬ᚹᛉ᛬ᚷᚺ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᚦ᛬ᚹᛉ᛬ᚷᚺ᛫ᚹᛁ᛬ᚷᚾ᛬ᚹᛉ᛫ᚹᛁ᛬ᚹᚹ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᛊ᛬ᚷᚦ᛫ᚷᛇ᛬ᚷᚾ᛬ᚹᚦ᛬ᚷᛊ᛬ᚷᛊ᛬ᚹᛉ᛬ᚹᚲ᛬ᚦᚠ᛫ᚷᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᛉ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚷ᛬ᚹᛉ᛬ᚷᚺ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᚷ᛬ᚷᛉ᛬ᚹᚲ᛬ᚹᚦ᛬ᚷᛊ᛬ᚷᚦ᛫ᚹᚹ᛬ᚹᚱ᛬ᚷᛈ᛬ᚹᛉ᛬ᚷᚺ᛫ᚹᚦ᛬ᚷᛊ᛫ᚷᚺ᛬ᚹᚱ᛫ᚹᚷ᛬ᚷᛉ᛬ᚹᚺ᛬ᚹᚨ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛫ᚹᚦ᛬ᚷᛊ᛫ᚷᛇ᛬ᚷᚾ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᛉ᛬ᚷᚺ᛫ᚹᚦ᛬ᚷᛊ᛬ᚷᚺ᛬ᚹᛉ᛬ᚹᚹ᛬ᚹᛈ᛫ᚹᛈ᛬ᚹᚱ᛬ᚷᚾ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚹᚷ᛬ᚨᚲ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᚷ᛬ᚹᛁ᛬ᚹᚲ᛬ᚹᛁ᛬ᚹᛇ᛬ᚹᛉ᛫ᚷᛊ᛬ᚹᚱ᛫ᚹᛇ᛬ᚹᛉ᛬ᚷᛊ᛫ᚹᚷ᛬ᚷᚦ᛫ᚹᚨ᛬ᚹᛁ᛬ᚹᚲ᛬ᚹᛊ᛬ᚷᚺ᛫ᚹᚱ᛬ᚹᚲ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚹᚷ᛬ᚨᚲ᛫ᚲᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᚲ᛫ᚹᚦ᛬ᚹᛈ᛫ᚹᚦ᛬ᚷᛊ᛫ᚹᚺ᛬ᚹᚱ᛬ᚷᚺ᛬ᚷᛊ᛬ᚷᚺ᛫ᚹᚷ᛬ᚹᛉ᛫ᚹᚷ᛬ᚷᚦ᛫ᚹᚹ᛬ᚹᚦ᛬ᚹᛈ᛬ᚹᛉ᛬ᚨᚲ᛫ᚲᚦ᛬ᚹᚲ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᛉ᛬ᚹᚲ᛬ᚹᛊ᛬ᚨᚹ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚷ᛫ᚹᛁ᛬ᚹᚹ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᛊ᛬ᚷᚦ᛫ᚹᛊ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᛊ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚲᛁ᛬ᚹᚲ᛬ᚹᛊ᛫ᚹᚦ᛬ᚷᛊ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᚺ᛫ᚹᚲ᛬ᚹᚱ᛬ᚷᛊ᛫ᚹᚹ᛬ᚹᚦ᛬ᚹᚠ᛬ᚹᛉ᛫ᚹᚦ᛬ᚷᛊ᛫ᚷᛇ᛬ᚹᚱ᛬ᚷᛉ᛬ᚹᚹ᛬ᚹᛊ᛫ᚹᚺ᛬ᚹᚨ᛬ᚹᛁ᛬ᚹᚲ᛬ᚹᛇ᛬ᚹᛉ᛫ᚹᚷ᛬ᚷᛉ᛬ᚹᚺ᛬ᚹᚨ᛫ᚹᛁ᛬ᚹᚲ᛬ᚷᚦ᛬ᚷᛇ᛬ᚹᛁ᛬ᚷᚦ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚲᚾ᛬ᚷᛉ᛬ᚷᛊ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛬ᚢᚢ᛬ᚢᚢ᛬ᚦᚲ᛫ᚦᛃ᛬ᚦᛉ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᚾ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᛃ᛬ᚦᚾ᛬ᚦᛁ᛫ᚱᚠ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛊ᛫ᚷᚺ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛬ᚱᚷ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᚦ᛬ᚷᛊ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᚺ᛫ᚹᚾ᛬ᚹᛉ᛬ᚹᛉ᛬ᚹᚲ᛫ᚹᛁ᛬ᚹᚹ᛬ᚹᚷ᛬ᚹᚱ᛬ᚷᚺ᛬ᚷᛊ᛫ᚦᚺ᛫ᚷᚦ᛬ᚹᛉ᛬ᚹᛁ᛬ᚷᚾ᛬ᚷᚺ᛬ᚨᚲ᛬ᚨᚲ᛫ᚱᚺ᛬ᚹᚨ᛬ᚹᛉ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᚺ᛫ᚹᛇ᛬ᚹᚱ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚷᛊ᛬ᚹᚱ᛫ᚷᚺ᛬ᚹᚲ᛬ᚹᛁ᛬ᚷᛃ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚱᛇ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛫ᚷᛇ᛬ᚹᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᚾ᛬ᚹᛉ᛬ᚹᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᛉ᛫ᚹᚱ᛬ᚹᛈ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚷᚺ᛬ᚹᚺ᛬ᚹᛉ᛬ᚹᚲ᛬ᚹᛉ᛫ᚷᛇ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᚨ᛬ᚹᚱ᛬ᚷᛉ᛬ᚷᛊ᛫ᚹᚨ᛬ᚹᛉ᛬ᚷᚾ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚲᚦ᛬ᚹᛈ᛫ᚷᚺ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᚹ᛬ᚹᛉ᛬ᚹᛁ᛬ᚷᛈ᛬ᚹᛉ᛬ᚷᚺ᛬ᚨᚹ᛫ᚲᚦ᛫ᚹᚹ᛬ᚹᛉ᛬ᚹᛁ᛬ᚷᛈ᛬ᚹᛉ᛬ᚨᚲ᛫ᚱᛇ᛬ᚹᛉ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᚾ᛬ᚹᛉ᛫ᚷᚾ᛬ᚹᛉ᛬ᚹᛁ᛬ᚹᚺ᛬ᚹᚨ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚹᛁ᛫ᚹᚹ᛬ᚹᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᚹ᛫ᚹᚱ᛬ᚹᛈ᛫ᚷᚾ᛬ᚹᚦ᛬ᚷᚺ᛬ᚹᚠ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛁ᛬ᚷᛊ᛬ᚨᛇ᛬ᚷᚺ᛫ᚹᚢ᛬ᚷᛉ᛬ᚷᚺ᛬ᚷᛊ᛫ᚷᛊ᛬ᚹᚱ᛬ᚹᚱ᛫ᚹᚨ᛬ᚹᚦ᛬ᚹᛇ᛬ᚹᚨ᛬ᚨᚲ᛫ᚲᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᚲ᛫ᚹᚦ᛬ᚹᛈ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᚺ᛬ᚹᚱ᛬ᚹᚲ᛬ᚹᚲ᛬ᚹᛉ᛬ᚹᚺ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛫ᚷᚾ᛬ᚹᛉ᛬ᚹᚷ᛬ᚹᛁ᛬ᚹᚦ᛬ᚹᚲ᛬ᚷᚺ᛫ᚹᛉ᛬ᚹᚲ᛬ᚹᚺ᛬ᚷᚾ᛬ᚷᚦ᛬ᚷᛃ᛬ᚷᛊ᛬ᚹᛉ᛬ᚹᛊ᛬ᚨᚹ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛬ᚷᚦ᛫ᚹᚺ᛬ᚹᛁ᛬ᚹᚲ᛫ᚷᛊ᛬ᚷᚾ᛬ᚹᛁ᛬ᚹᚺ᛬ᚹᛉ᛫ᚹᚦ᛬ᚷᛊ᛫ᚹᚾ᛬ᚹᛁ᛬ᚹᚺ᛬ᚹᚠ᛫ᚷᛊ᛬ᚹᚱ᛫ᚹᚷ᛬ᚹᛉ᛬ᚨᚲ᛬ᚢᚢ᛬ᚢᚢ᛬ᚦᚲ᛫ᚦᛃ᛬ᚦᚦ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᚾ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᛃ᛬ᚦᚾ᛬ᚦᚾ᛫ᚱᚠ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛊ᛫ᚷᚺ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛬ᚱᚷ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚷ᛫ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᛃ᛬ᚷᛃ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚹᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚷᚾ᛬ᚷᚦ᛬ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛬ᚨᚲ᛬ᚨᚲ᛫ᚱᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚹᚺ᛬ᚹᛁ᛬ᚹᚲ᛫ᚹᚹ᛬ᚹᚱ᛬ᚹᚱ᛬ᚹᚠ᛫ᚹᛁ᛬ᚷᚺ᛫ᚹᚷ᛬ᚷᛉ᛬ᚹᚺ᛬ᚹᚨ᛫ᚹᛁ᛬ᚷᚺ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᛇ᛬ᚹᛁ᛬ᚹᚲ᛬ᚷᛊ᛬ᚨᚹ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᛇ᛬ᚹᚱ᛬ᚹᚲ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᛊ᛫ᚹᛈ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛊ᛫ᚹᛁ᛬ᚹᚲ᛬ᚷᚦ᛬ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛬ᚦᚠ᛫ᚹᛉ᛬ᚷᛈ᛬ᚹᛉ᛬ᚹᚲ᛫ᚹᚦ᛬ᚹᛈ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚷᚺ᛫ᚷᚺ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᛉ᛫ᚹᚨ᛬ᚹᛁ᛬ᚷᚺ᛫ᚹᛁ᛫ᚷᛃ᛬ᚷᛉ᛬ᚹᚾ᛬ᚹᚹ᛬ᚹᚦ᛬ᚹᚺ᛫ᚷᚾ᛬ᚹᛉ᛬ᚷᛃ᛬ᚹᚱ᛬ᚨᚹ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚷᛈ᛬ᚹᛉ᛫ᚹᛉ᛬ᚹᚲ᛬ᚹᚺ᛬ᚷᚾ᛬ᚷᚦ᛬ᚷᛃ᛬ᚷᛊ᛬ᚹᛉ᛬ᚹᛊ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᛉ᛫ᚹᛈ᛬ᚹᚦ᛬ᚹᚹ᛬ᚹᛉ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚲᚦ᛬ᛊᚾ᛬ᚾᛃ᛬ᚺᚦ᛬ᚹᚷ᛫ᚷᛊ᛬ᚹᛁ᛬ᚹᚠ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚷᛊ᛬ᚹᚨ᛬ᚹᚦ᛬ᚷᚺ᛫ᚷᚺ᛬ᚹᛉ᛬ᚹᚺ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᛊ᛫ᚷᛇ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᚨ᛫ᚹᚷ᛬ᚹᛉ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛬ᚢᚢ᛬ᚢᚢ᛬ᚦᚲ᛫ᚦᛃ᛬ᚦᚾ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᛇ᛬ᚨᚱ᛬ᚦᚾ᛬ᚦᛃ᛬ᚦᚾ᛬ᚦᛈ᛫ᚱᚠ᛬ᚷᚾ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᛊ᛬ᚹᚱ᛬ᚷᚾ᛬ᚹᛉ᛬ᚹᛊ᛫ᚷᚺ᛬ᚹᛉ᛬ᚷᚺ᛬ᚷᚺ᛬ᚹᚦ᛬ᚹᚱ᛬ᚹᚲ᛬ᚱᚷ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᛁ᛬ᚷᚾ᛬ᚹᛉ᛫ᚷᚦ᛬ᚹᚱ᛬ᚷᛉ᛫ᚷᚺ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚹ᛬ᚹᚹ᛫ᚹᛁ᛬ᚹᚹ᛬ᚹᚦ᛬ᚷᛈ᛬ᚹᛉ᛫ᚦᚱ᛬ᚨᚲ᛬ᚨᚲ᛬ᚦᚱ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛬ᚦᚱ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛫ᚨᚲ᛬ᚨᚲ᛫ᚨᚲ᛬ᚢᚢ᛬ᚦᚲ᛫ᚲᛁ᛬ᚷᛇ᛬ᚹᛁ᛬ᚹᚦ᛬ᚷᛊ᛬ᚹᚦ᛬ᚹᚲ᛬ᚹᛇ᛫ᚹᚺ᛬ᚹᚱ᛬ᚹᚷ᛬ᚹᚷ᛬ᚹᛁ᛬ᚹᚲ᛬ᚹᛊ᛬ᚷᚺ᛬ᚨᚲ᛬ᚨᚲ᛬ᚨᚲ᛬ᚢᚢ᛬ᚦᚲ᛫ᚱᚱ"
+       )
+     )
+     |> assign(:warez_glitching, MapSet.new())}
   end
 
   defp init_snake_game do
@@ -114,12 +121,21 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
     windows = Map.put(socket.assigns.windows, window_id, window)
 
-    {:noreply,
-     socket
-     |> assign(:windows, windows)
-     |> assign(:active_window, window_id)
-     |> assign(:start_menu_open, false)
-     |> assign(:z_index_counter, socket.assigns.z_index_counter + 1)}
+    socket =
+      socket
+      |> assign(:windows, windows)
+      |> assign(:active_window, window_id)
+      |> assign(:start_menu_open, false)
+      |> assign(:z_index_counter, socket.assigns.z_index_counter + 1)
+
+    socket =
+      if app == "warez" do
+        assign(socket, :warez_glitching, MapSet.put(socket.assigns.warez_glitching, window_id))
+      else
+        socket
+      end
+
+    {:noreply, socket}
   end
 
   def handle_event("close_window", %{"window-id" => window_id}, socket) do
@@ -156,6 +172,17 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      |> assign(:active_window, window_id)
      |> assign(:z_index_counter, socket.assigns.z_index_counter + 1)
      |> update_window_z_index(window_id)}
+  end
+
+  # Warez glitch done
+  def handle_event("warez_glitch_done", %{"window-id" => window_id}, socket) do
+    {:noreply,
+     assign(socket, :warez_glitching, MapSet.delete(socket.assigns.warez_glitching, window_id))}
+  end
+
+  # Warez content change
+  def handle_event("warez_change", %{"content" => content}, socket) do
+    {:noreply, assign(socket, :warez_content, content)}
   end
 
   # Notepad events
@@ -466,6 +493,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       "snake" -> "Snake"
       "minesweeper" -> "Démineur"
       "calculator" -> "Calculatrice"
+      "warez" -> "Warez"
       "terminal" -> "Terminal"
       _ -> "Application"
     end
@@ -477,6 +505,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       "snake" -> 440
       "minesweeper" -> 320
       "calculator" -> 280
+      "warez" -> 520
       "terminal" -> 600
       _ -> 400
     end
@@ -488,6 +517,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       "snake" -> 520
       "minesweeper" -> 400
       "calculator" -> 420
+      "warez" -> 420
       "terminal" -> 400
       _ -> 300
     end
@@ -500,7 +530,12 @@ defmodule ShdxwWeb.Components.ShdxwOS do
       id={@id}
       class="os-container relative w-full h-[700px] bg-gradient-to-br from-gray-900 via-purple-950/50 to-gray-900 rounded-2xl border border-purple-500/30 overflow-hidden"
     >
-      <!-- Click overlay to close start menu -->
+      <!-- Background Image -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+        <img src="/images/shdxwOS.png" alt="" class="max-w-md max-h-96 object-contain" />
+      </div>
+      
+    <!-- Click overlay to close start menu -->
       <%= if @start_menu_open do %>
         <div
           class="absolute inset-0 z-40"
@@ -518,6 +553,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <.desktop_icon icon="snake" label="Snake" target={@myself} />
           <.desktop_icon icon="minesweeper" label="Démineur" target={@myself} />
           <.desktop_icon icon="calculator" label="Calculatrice" target={@myself} />
+          <.desktop_icon icon="warez" label="Warez" target={@myself} />
         </div>
         
     <!-- Windows -->
@@ -531,6 +567,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
             snake_game={@snake_game}
             minesweeper_game={@minesweeper_game}
             calculator_display={@calculator_display}
+            warez_content={@warez_content}
+            warez_glitching={MapSet.member?(@warez_glitching, window_id)}
           />
         <% end %>
       </div>
@@ -549,7 +587,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
           <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-violet-600 rounded-md flex items-center justify-center">
             <span class="text-white text-xs font-black">S</span>
           </div>
-          <span class="text-white font-semibold text-sm">Démarrer</span>
+          <span class="text-white font-semibold text-sm">Menu</span>
         </button>
 
         <div class="h-8 w-px bg-white/20 mx-2"></div>
@@ -618,6 +656,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
                 d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
+          <% "warez" -> %>
+            <img src="/images/1299051.svg" alt="Warez" class="w-8 h-8 invert" />
           <% _ -> %>
             <div class="w-8 h-8 bg-white/20 rounded"></div>
         <% end %>
@@ -639,7 +679,7 @@ defmodule ShdxwWeb.Components.ShdxwOS do
         </div>
         <div>
           <p class="text-white font-bold text-lg">SHDXW</p>
-          <p class="text-white/70 text-sm">Shadow Developer</p>
+          <p class="text-white/70 text-sm">Developer / ṯ̵̺͆r̶͚̈́ǎ̸͙̤͐c̸͙͊͝k̶͖̊͌e̴̼̙̊r̴̖̚</p>
         </div>
       </div>
       
@@ -676,6 +716,13 @@ defmodule ShdxwWeb.Components.ShdxwOS do
               label="Calculatrice"
               description="Calculs simples"
               app="calculator"
+              myself={@myself}
+            />
+            <.start_menu_item
+              icon="warez"
+              label="Warez"
+              description="Terminal crypté"
+              app="warez"
               myself={@myself}
             />
           </div>
@@ -823,6 +870,8 @@ defmodule ShdxwWeb.Components.ShdxwOS do
             d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
           />
         </svg>
+      <% "warez" -> %>
+        <img src="/images/1299051.svg" alt="Warez" class="w-6 h-6 invert" />
       <% _ -> %>
         <div class="w-6 h-6 bg-white/20 rounded"></div>
     <% end %>
@@ -942,6 +991,14 @@ defmodule ShdxwWeb.Components.ShdxwOS do
             <.minesweeper_app game={@minesweeper_game} myself={@myself} />
           <% "calculator" -> %>
             <.calculator_app display={@calculator_display} myself={@myself} />
+          <% "warez" -> %>
+            <.warez_app
+              content={@warez_content}
+              myself={@myself}
+              glitching={@warez_glitching}
+              window_id={@window.id}
+              component_id={@component_id}
+            />
           <% _ -> %>
             <div class="p-4 text-white">Application non trouvée</div>
         <% end %>
@@ -1206,6 +1263,108 @@ defmodule ShdxwWeb.Components.ShdxwOS do
 
         <.calc_btn click="calc_digit" value="0" myself={@myself} class="col-span-2">0</.calc_btn>
         <.calc_btn click="calc_decimal" myself={@myself}>.</.calc_btn>
+      </div>
+    </div>
+    """
+  end
+
+  defp warez_app(assigns) do
+    ~H"""
+    <div class="h-full relative">
+      <!-- Glitch overlay -->
+      <%= if @glitching do %>
+        <div
+          id={"glitch-#{@window_id}"}
+          phx-hook="WarezGlitch"
+          data-component-id={@component_id}
+          data-window-id={@window_id}
+          class="absolute inset-0 z-10 bg-black overflow-hidden"
+        >
+          <style>
+            @keyframes glitch-skew {
+              0% { transform: skew(0deg); }
+              10% { transform: skew(-2deg); }
+              20% { transform: skew(4deg); }
+              30% { transform: skew(-1deg); }
+              40% { transform: skew(3deg); }
+              50% { transform: skew(-3deg); }
+              60% { transform: skew(2deg); }
+              70% { transform: skew(-4deg); }
+              80% { transform: skew(1deg); }
+              90% { transform: skew(-2deg); }
+              100% { transform: skew(0deg); }
+            }
+            @keyframes glitch-flicker {
+              0%, 100% { opacity: 1; }
+              5% { opacity: 0.3; }
+              10% { opacity: 0.8; }
+              15% { opacity: 0.1; }
+              20% { opacity: 0.9; }
+              30% { opacity: 0.5; }
+              35% { opacity: 1; }
+              50% { opacity: 0.2; }
+              55% { opacity: 0.8; }
+              70% { opacity: 0.4; }
+              75% { opacity: 1; }
+              85% { opacity: 0.6; }
+              90% { opacity: 0.1; }
+              95% { opacity: 0.9; }
+            }
+            @keyframes glitch-color {
+              0% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
+              25% { text-shadow: -2px 0 #ff0000, 2px 0 #0000ff; }
+              50% { text-shadow: 2px 2px #00ff00, -2px -2px #ff0000; }
+              75% { text-shadow: -2px 0 #0000ff, 2px 0 #ff0000; }
+              100% { text-shadow: 2px 0 #ff0000, -2px 0 #00ff00; }
+            }
+            @keyframes scanline {
+              0% { top: -10%; }
+              100% { top: 110%; }
+            }
+            .glitch-text {
+              animation: glitch-skew 0.3s infinite, glitch-color 0.2s infinite, glitch-flicker 0.4s infinite;
+              font-family: monospace;
+            }
+            .glitch-scanline {
+              animation: scanline 0.8s linear infinite;
+            }
+          </style>
+
+          <div class="glitch-text w-full h-full flex flex-col items-center justify-center text-green-500 text-sm p-4">
+            <div class="mb-2 text-red-500 text-xs">ERROR 0xDEAD :: BUFFER OVERFLOW</div>
+            <div class="text-purple-400">
+              &#9608;&#9608;&#9608; INITIALIZING &#9608;&#9608;&#9608;
+            </div>
+            <div class="mt-1 text-green-400 text-xs">%$#@!&amp;*^~`&rbrace;&lbrace;][|</div>
+            <div class="mt-1 text-red-400 text-xs">SEGFAULT AT 0x7FFF5FBFF8C0</div>
+            <div class="mt-1 text-yellow-400 text-xs">kernel panic - not syncing</div>
+            <div class="mt-2 text-purple-300 text-lg font-bold">S H D X W</div>
+            <div class="mt-1 text-green-500 text-xs">
+              &#9617;&#9618;&#9619;&#9608;&#9619;&#9618;&#9617;&#9608;&#9619;&#9618;&#9617;&#9608;&#9619;&#9618;&#9617;
+            </div>
+          </div>
+          
+    <!-- Scanline effect -->
+          <div class="glitch-scanline absolute left-0 w-full h-1 bg-white/10 pointer-events-none">
+          </div>
+          <!-- Horizontal glitch bars -->
+          <div class="absolute top-1/4 left-0 w-full h-1 bg-red-500/30 animate-pulse"></div>
+          <div class="absolute top-2/3 left-0 w-full h-0.5 bg-green-500/20 animate-pulse"></div>
+        </div>
+      <% end %>
+      
+    <!-- Actual warez content (notepad-like) -->
+      <div class={"h-full flex flex-col #{if @glitching, do: "invisible", else: ""}"}>
+        <div class="bg-gray-800/50 px-3 py-1 text-xs text-green-500/60 border-b border-green-500/20 font-mono">
+          [ENCRYPTED] | NODE: shdxw-relay-07 | PING: 12ms
+        </div>
+        <textarea
+          phx-change="warez_change"
+          phx-target={@myself}
+          name="content"
+          class="flex-1 w-full bg-black text-green-400/90 p-4 font-mono text-sm resize-none focus:outline-none caret-green-500"
+          placeholder="> _"
+        ><%= @content %></textarea>
       </div>
     </div>
     """

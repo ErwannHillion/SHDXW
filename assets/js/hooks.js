@@ -159,6 +159,25 @@ const ShdxwOS = {
     }
 };
 
+// Warez glitch effect hook
+const WarezGlitch = {
+    mounted() {
+        const componentId = this.el.dataset.componentId;
+        const windowId = this.el.dataset.windowId;
+
+        // End glitch after 2 seconds
+        this.glitchTimer = setTimeout(() => {
+            this.pushEventTo(`#${componentId}`, 'warez_glitch_done', { 'window-id': windowId });
+        }, 2000);
+    },
+
+    destroyed() {
+        if (this.glitchTimer) {
+            clearTimeout(this.glitchTimer);
+        }
+    }
+};
+
 // Clipboard copy hook
 const Clipboard = {
     mounted() {
@@ -173,6 +192,7 @@ let Hooks = {
     Draggable: Draggable,
     SnakeGame: SnakeGame,
     ShdxwOS: ShdxwOS,
+    WarezGlitch: WarezGlitch,
     Clipboard: Clipboard
 }
 
