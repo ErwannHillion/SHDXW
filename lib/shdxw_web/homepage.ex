@@ -1,6 +1,8 @@
 defmodule ShdxwWeb.Homepage do
   use ShdxwWeb, :live_view
 
+  alias ShdxwWeb.Components.ShdxwOS
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
@@ -184,6 +186,24 @@ defmodule ShdxwWeb.Homepage do
         </div>
       </div>
       
+    <!-- OS Section -->
+      <div id="os-section" class="py-32 px-4 bg-black relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-purple-950/20"></div>
+
+        <div class="max-w-6xl mx-auto relative">
+          <h2 class="text-6xl font-black mb-4 text-white tracking-wider text-center">
+            SHDXW <span class="text-purple-500">OS</span>
+          </h2>
+          <div class="w-32 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent mx-auto rounded-full mb-4">
+          </div>
+          <p class="text-xl text-white/60 mb-12 tracking-wide text-center">
+            Explorez mon environnement interactif
+          </p>
+
+          <.live_component module={ShdxwOS} id="shdxw-os" />
+        </div>
+      </div>
+
     <!-- Section en construction-->
       <div id="en-construction" class="py-32 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-purple-950/20 to-transparent"></div>

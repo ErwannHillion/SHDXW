@@ -18,6 +18,7 @@ defmodule ShdxwWeb.Router do
     pipe_through :browser
 
     live "/", Homepage, :index
+    live "/mtb", Mtb, :index
   end
 
   # Other scopes may use custom stacks.
