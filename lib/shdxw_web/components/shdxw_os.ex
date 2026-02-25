@@ -215,48 +215,6 @@ defmodule ShdxwWeb.Components.ShdxwOS do
     end
   end
 
-  defp move_snake(game) do
-    [head | _] = game.snake
-    {hx, hy} = head
-
-    new_head =
-      case game.direction do
-        :up -> {hx, hy - 1}
-        :down -> {hx, hy + 1}
-        :left -> {hx - 1, hy}
-        :right -> {hx + 1, hy}
-      end
-
-    {nx, ny} = new_head
-    grid = game.grid_size
-
-    cond do
-      # Wall collision
-      nx < 0 or nx >= grid or ny < 0 or ny >= grid ->
-        %{game | game_over: true, running: false}
-
-      # Self collision
-      Enum.member?(game.snake, new_head) ->
-        %{game | game_over: true, running: false}
-
-      # Food eaten
-      new_head == game.food ->
-        new_snake = [new_head | game.snake]
-        new_food = generate_food(new_snake, grid)
-        %{game | snake: new_snake, food: new_food, score: game.score + 10}
-
-      # Normal move
-      true ->
-        new_snake = [new_head | Enum.drop(game.snake, -1)]
-        %{game | snake: new_snake}
-    end
-  end
-
-  defp generate_food(snake, grid) do
-    food = {:rand.uniform(grid) - 1, :rand.uniform(grid) - 1}
-    if Enum.member?(snake, food), do: generate_food(snake, grid), else: food
-  end
-
   def handle_event("snake_reset", _, socket) do
     {:noreply, assign(socket, :snake_game, init_snake_game())}
   end
@@ -401,6 +359,44 @@ defmodule ShdxwWeb.Components.ShdxwOS do
      socket
      |> assign(:calculator_display, display)
      |> assign(:calculator_new_number, false)}
+  end
+
+  defp move_snake(game) do
+    [head | _] = game.snake
+    {hx, hy} = head
+
+    new_head =
+      case game.direction do
+        :up -> {hx, hy - 1}
+        :down -> {hx, hy + 1}
+        :left -> {hx - 1, hy}
+        :right -> {hx + 1, hy}
+      end
+
+    {nx, ny} = new_head
+    grid = game.grid_size
+
+    cond do
+      nx < 0 or nx >= grid or ny < 0 or ny >= grid ->
+        %{game | game_over: true, running: false}
+
+      Enum.member?(game.snake, new_head) ->
+        %{game | game_over: true, running: false}
+
+      new_head == game.food ->
+        new_snake = [new_head | game.snake]
+        new_food = generate_food(new_snake, grid)
+        %{game | snake: new_snake, food: new_food, score: game.score + 10}
+
+      true ->
+        new_snake = [new_head | Enum.drop(game.snake, -1)]
+        %{game | snake: new_snake}
+    end
+  end
+
+  defp generate_food(snake, grid) do
+    food = {:rand.uniform(grid) - 1, :rand.uniform(grid) - 1}
+    if Enum.member?(snake, food), do: generate_food(snake, grid), else: food
   end
 
   defp reveal_cell(game, {x, y}) do

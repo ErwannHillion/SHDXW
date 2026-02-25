@@ -122,7 +122,7 @@ defmodule ShdxwWeb.Mtb do
           </div>
 
           <!-- Decode Section -->
-          <div class="bg-gray-900/50 rounded-2xl border border-purple-500/20 overflow-hidden">
+          <%!-- <div class="bg-gray-900/50 rounded-2xl border border-purple-500/20 overflow-hidden">
             <div class="bg-violet-600/10 border-b border-purple-500/20 px-6 py-3 flex items-center gap-2">
               <div class="w-2 h-2 rounded-full bg-violet-500"></div>
               <span class="text-violet-400 text-sm font-semibold uppercase tracking-wider">Decoder</span>
@@ -159,7 +159,7 @@ defmodule ShdxwWeb.Mtb do
                 </div>
               <% end %>
             </div>
-          </div>
+          </div> --%>
 
           <!-- Info -->
           <div class="bg-gray-900/50 rounded-2xl border border-white/10 p-6 text-center">
