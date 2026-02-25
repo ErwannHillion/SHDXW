@@ -187,13 +187,65 @@ const Clipboard = {
     }
 };
 
+// Kanban drag & drop hook
+const KanbanDrag = {
+    mounted() {
+        this.el.addEventListener("dragstart", (e) => {
+            const card = e.target.closest("[data-todo-id]");
+            if (!card) return;
+            e.dataTransfer.setData("text/plain", card.dataset.todoId);
+            e.dataTransfer.effectAllowed = "move";
+            card.classList.add("opacity-40", "scale-95");
+            // Highlight all columns
+            document.querySelectorAll("[data-kanban-status]").forEach(col => {
+                col.classList.add("ring-2", "ring-purple-500/30");
+            });
+        });
+
+        this.el.addEventListener("dragend", (e) => {
+            const card = e.target.closest("[data-todo-id]");
+            if (card) card.classList.remove("opacity-40", "scale-95");
+            document.querySelectorAll("[data-kanban-status]").forEach(col => {
+                col.classList.remove("ring-2", "ring-purple-500/30", "ring-purple-500/60", "bg-purple-500/5");
+            });
+        });
+
+        // Column events
+        this.el.querySelectorAll("[data-kanban-status]").forEach(col => {
+            col.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                col.classList.add("ring-purple-500/60", "bg-purple-500/5");
+                col.classList.remove("ring-purple-500/30");
+            });
+
+            col.addEventListener("dragleave", (e) => {
+                if (!col.contains(e.relatedTarget)) {
+                    col.classList.remove("ring-purple-500/60", "bg-purple-500/5");
+                    col.classList.add("ring-purple-500/30");
+                }
+            });
+
+            col.addEventListener("drop", (e) => {
+                e.preventDefault();
+                const todoId = e.dataTransfer.getData("text/plain");
+                const newStatus = col.dataset.kanbanStatus;
+                if (todoId && newStatus) {
+                    this.pushEvent("move_to_status", { id: todoId, status: newStatus });
+                }
+            });
+        });
+    }
+};
+
 let Hooks = {
     ScrollEffect: ScrollEffect,
     Draggable: Draggable,
     SnakeGame: SnakeGame,
     ShdxwOS: ShdxwOS,
     WarezGlitch: WarezGlitch,
-    Clipboard: Clipboard
+    Clipboard: Clipboard,
+    KanbanDrag: KanbanDrag
 }
 
 export { Hooks }

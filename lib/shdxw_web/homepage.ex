@@ -75,7 +75,7 @@ defmodule ShdxwWeb.Homepage do
           </div>
         </div>
       </div>
-      
+
     <!-- Scroll Effect Section -->
       <div
         id="scroll-effect"
@@ -185,7 +185,7 @@ defmodule ShdxwWeb.Homepage do
           </div>
         </div>
       </div>
-      
+
     <!-- OS Section -->
       <div id="os-section" class="py-32 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-purple-950/20"></div>
@@ -219,7 +219,7 @@ defmodule ShdxwWeb.Homepage do
           </p>
         </div>
       </div>
-      
+
     <!-- Contact Section -->
       <div id="contact" class="py-32 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-t from-purple-950/20 to-transparent"></div>
@@ -261,7 +261,7 @@ defmodule ShdxwWeb.Homepage do
             </a>
 
             <a
-              href="https://github.com/shdxw"
+              href="https://github.com/ErwannHillion"
               target="_blank"
               class="group px-8 py-4 bg-white/5 border-2 border-white/20 hover:border-purple-500 rounded-lg transition-all duration-300"
             >
@@ -279,7 +279,7 @@ defmodule ShdxwWeb.Homepage do
             </a>
 
             <a
-              href="https://linkedin.com/in/shdxw"
+              href="https://www.linkedin.com/in/erwann-hillion/"
               target="_blank"
               class="group px-8 py-4 bg-white/5 border-2 border-white/20 hover:border-purple-500 rounded-lg transition-all duration-300"
             >
@@ -298,7 +298,7 @@ defmodule ShdxwWeb.Homepage do
           </div>
         </div>
       </div>
-      
+
     <!-- Footer -->
       <footer class="py-12 px-4 bg-black border-t border-white/10">
         <div class="max-w-7xl mx-auto text-center">
