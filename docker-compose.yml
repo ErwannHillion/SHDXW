@@ -1,6 +1,6 @@
 services:
   database:
-    image: postgres:latest
+    image: postgres:17
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWD}
       - POSTGRES_USER=${POSTGRES_USR}

@@ -238,6 +238,91 @@ const KanbanDrag = {
     }
 };
 
+// Pomodoro Timer hook - client-side countdown with server validation
+const PomodoroTimer = {
+    mounted() {
+        this.timerInterval = null;
+        this.endTime = null;
+
+        this.handleEvent("start_timer", ({duration_seconds}) => {
+            this.endTime = Date.now() + duration_seconds * 1000;
+            this.startTicking();
+        });
+
+        this.handleEvent("stop_timer", () => {
+            this.stopTicking();
+        });
+
+        // Resume timer if already active
+        const isActive = this.el.dataset.active === "true";
+        const remaining = parseInt(this.el.dataset.remaining || "0");
+        if (isActive && remaining > 0) {
+            this.endTime = Date.now() + remaining * 1000;
+            this.startTicking();
+        }
+    },
+
+    startTicking() {
+        if (this.timerInterval) return;
+
+        this.timerInterval = setInterval(() => {
+            const remaining = Math.max(0, Math.floor((this.endTime - Date.now()) / 1000));
+            const display = this.el.querySelector('#timer-display');
+            if (display) {
+                const min = Math.floor(remaining / 60);
+                const sec = remaining % 60;
+                display.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+            }
+
+            if (remaining <= 0) {
+                this.stopTicking();
+                this.pushEvent("timer_complete", {});
+            }
+        }, 1000);
+    },
+
+    stopTicking() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    },
+
+    destroyed() {
+        this.stopTicking();
+    }
+};
+
+// XP Toast notification hook
+const XpToast = {
+    mounted() {
+        this.handleEvent("xp_toast", ({xp, gold, description}) => {
+            this.showToast(xp, gold, description);
+        });
+    },
+
+    showToast(xp, gold, description) {
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-20 right-4 z-50 animate-slide-in';
+        toast.innerHTML = `
+            <div class="bg-gradient-to-r from-purple-950/90 to-black/90 border border-purple-500/30 rounded-xl px-4 py-3 shadow-2xl shadow-purple-600/20 backdrop-blur-sm">
+                <div class="text-xs text-white/40 mb-1">${description || ''}</div>
+                <div class="flex items-center gap-3">
+                    ${xp > 0 ? `<span class="text-purple-400 font-bold">+${xp} XP</span>` : ''}
+                    ${gold > 0 ? `<span class="text-amber-400 font-bold">+${gold} Or</span>` : ''}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.5s';
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
+};
+
 let Hooks = {
     ScrollEffect: ScrollEffect,
     Draggable: Draggable,
@@ -245,7 +330,9 @@ let Hooks = {
     ShdxwOS: ShdxwOS,
     WarezGlitch: WarezGlitch,
     Clipboard: Clipboard,
-    KanbanDrag: KanbanDrag
+    KanbanDrag: KanbanDrag,
+    PomodoroTimer: PomodoroTimer,
+    XpToast: XpToast
 }
 
 export { Hooks }

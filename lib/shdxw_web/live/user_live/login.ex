@@ -124,15 +124,17 @@ defmodule ShdxwWeb.UserLive.Login do
               type="submit"
               class="w-full py-3.5 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white rounded-xl font-bold tracking-wider shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all duration-300 flex items-center justify-center gap-2"
             >
-              SE CONNECTER
-              <.icon name="hero-arrow-right" class="size-5" />
+              SE CONNECTER <.icon name="hero-arrow-right" class="size-5" />
             </button>
           </.form>
         </div>
 
         <%!-- Footer --%>
         <div class="mt-8 text-center">
-          <a href="/" class="text-sm text-white/30 hover:text-purple-400 transition-colors tracking-wide">
+          <a
+            href="/"
+            class="text-sm text-white/30 hover:text-purple-400 transition-colors tracking-wide"
+          >
             &larr; Retour au site
           </a>
         </div>

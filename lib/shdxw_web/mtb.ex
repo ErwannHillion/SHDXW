@@ -73,7 +73,10 @@ defmodule ShdxwWeb.Mtb do
         <!-- Title -->
         <div class="text-center mb-16">
           <h1 class="text-5xl font-black mb-3 tracking-wider">
-            MTB <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-400">CIPHER</span>
+            MTB
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-400">
+              CIPHER
+            </span>
           </h1>
           <p class="text-white/50">Encodeur runique SHDXW</p>
         </div>
@@ -83,13 +86,17 @@ defmodule ShdxwWeb.Mtb do
           <div class="bg-gray-900/50 rounded-2xl border border-purple-500/20 overflow-hidden">
             <div class="bg-purple-600/10 border-b border-purple-500/20 px-6 py-3 flex items-center gap-2">
               <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-              <span class="text-purple-400 text-sm font-semibold uppercase tracking-wider">Encoder</span>
+              <span class="text-purple-400 text-sm font-semibold uppercase tracking-wider">
+                Encoder
+              </span>
             </div>
 
             <div class="p-6">
               <form phx-change="encode" class="space-y-4">
                 <div>
-                  <label class="text-white/60 text-xs uppercase tracking-wider mb-2 block">Texte en clair</label>
+                  <label class="text-white/60 text-xs uppercase tracking-wider mb-2 block">
+                    Texte en clair
+                  </label>
                   <textarea
                     name="text"
                     value={@input_text}
@@ -103,25 +110,27 @@ defmodule ShdxwWeb.Mtb do
               <%= if @encoded_text != "" do %>
                 <div class="mt-6">
                   <div class="flex items-center justify-between mb-2">
-                    <label class="text-white/60 text-xs uppercase tracking-wider">Texte runique</label>
+                    <label class="text-white/60 text-xs uppercase tracking-wider">
+                      Texte runique
+                    </label>
                     <button
                       phx-click="copy_encoded"
                       id="copy-btn"
                       phx-hook="Clipboard"
                       class="text-xs px-3 py-1 rounded-lg bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 transition-all"
                     >
-                      <%= if @copied, do: "Copie !", else: "Copier" %>
+                      {if @copied, do: "Copie !", else: "Copier"}
                     </button>
                   </div>
                   <div class="bg-black/50 border border-purple-500/20 rounded-xl p-4 font-mono text-lg text-purple-300 break-all leading-relaxed select-all">
-                    <%= @encoded_text %>
+                    {@encoded_text}
                   </div>
                 </div>
               <% end %>
             </div>
           </div>
-
-          <!-- Decode Section -->
+          
+    <!-- Decode Section -->
           <%!-- <div class="bg-gray-900/50 rounded-2xl border border-purple-500/20 overflow-hidden">
             <div class="bg-violet-600/10 border-b border-purple-500/20 px-6 py-3 flex items-center gap-2">
               <div class="w-2 h-2 rounded-full bg-violet-500"></div>
@@ -160,8 +169,8 @@ defmodule ShdxwWeb.Mtb do
               <% end %>
             </div>
           </div> --%>
-
-          <!-- Info -->
+          
+    <!-- Info -->
           <div class="bg-gray-900/50 rounded-2xl border border-white/10 p-6 text-center">
             <p class="text-white/30 text-sm">
               Chiffrement runique SHDXW &mdash; La clé est protégée par variables d'environnement.

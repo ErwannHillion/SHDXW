@@ -3,6 +3,10 @@ defmodule ShdxwWeb.TodoLive.Index do
 
   alias Shdxw.Todos
   alias Shdxw.Todos.Todo
+  alias Shdxw.Gamification
+
+  import ShdxwWeb.Components.GamificationBar
+  import ShdxwWeb.Components.AppNav
 
   @impl true
   def mount(_params, _session, socket) do
@@ -10,11 +14,13 @@ defmodule ShdxwWeb.TodoLive.Index do
 
     if connected?(socket) do
       Todos.subscribe(scope)
+      Gamification.subscribe(scope)
     end
 
     todos = Todos.list_todos(scope)
     stats = Todos.get_stats(scope)
     changeset = Todos.change_todo(%Todo{})
+    profile = Gamification.get_or_create_profile(scope)
 
     {:ok,
      socket
@@ -29,7 +35,10 @@ defmodule ShdxwWeb.TodoLive.Index do
      |> assign(:editing_todo_id, nil)
      |> assign(:edit_form, nil)
      |> assign(:show_new_form, false)
-     |> assign(:form, to_form(changeset))}
+     |> assign(:form, to_form(changeset))
+     |> assign(:profile, profile)
+     |> assign(:xp_progress, Gamification.xp_progress_in_level(profile.xp))
+     |> assign(:current_page, :todos)}
   end
 
   @impl true
@@ -43,19 +52,28 @@ defmodule ShdxwWeb.TodoLive.Index do
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/5 rounded-full blur-3xl" />
       </div>
 
-      <%!-- Minimal header --%>
-      <div class="relative z-10 flex items-center justify-between px-6 py-4 border-b border-white/5">
-        <a href="/" class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-violet-500 tracking-wider">
+      <%!-- Header --%>
+      <div class="relative z-20 flex items-center justify-between px-6 py-4 border-b border-white/5 bg-black/80 backdrop-blur-sm">
+        <a
+          href="/"
+          class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-violet-500 tracking-wider"
+        >
           SHDXW
         </a>
-        <span class="text-white/40 text-sm">{@current_scope.user.email}</span>
       </div>
+
+      <.gamification_bar profile={@profile} xp_progress={@xp_progress} />
+      <.app_nav current_page={@current_page} current_scope={@current_scope} />
 
       <%!-- Flash --%>
       <Layouts.flash_group flash={@flash} />
 
       <%!-- Content --%>
-      <div class={["relative z-10 px-6 py-8 mx-auto", @view_mode == :kanban && "max-w-7xl", @view_mode != :kanban && "max-w-4xl"]}>
+      <div class={[
+        "relative z-10 px-6 py-8 mx-auto",
+        @view_mode == :kanban && "max-w-7xl",
+        @view_mode != :kanban && "max-w-4xl"
+      ]}>
         <%!-- Header --%>
         <div class="mb-10">
           <h1 class="text-5xl font-black text-white tracking-wider mb-2">
@@ -146,8 +164,10 @@ defmodule ShdxwWeb.TodoLive.Index do
                 phx-value-status={value}
                 class={[
                   "px-3 py-1.5 rounded-lg text-sm transition-all",
-                  @status_filter == value && "bg-purple-600/20 text-purple-400 border border-purple-500/30",
-                  @status_filter != value && "text-white/40 hover:text-white/60 border border-transparent"
+                  @status_filter == value &&
+                    "bg-purple-600/20 text-purple-400 border border-purple-500/30",
+                  @status_filter != value &&
+                    "text-white/40 hover:text-white/60 border border-transparent"
                 ]}
               >
                 {label}
@@ -158,16 +178,26 @@ defmodule ShdxwWeb.TodoLive.Index do
           <div class="flex gap-2">
             <%!-- Sort (list mode only) --%>
             <div :if={@view_mode == :list} class="dropdown dropdown-end">
-              <div tabindex="0" role="button" class="px-3 py-1.5 rounded-lg text-sm text-white/40 hover:text-white/70 border border-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center gap-1">
-                <.icon name="hero-arrows-up-down" class="size-4" />
-                Trier
+              <div
+                tabindex="0"
+                role="button"
+                class="px-3 py-1.5 rounded-lg text-sm text-white/40 hover:text-white/70 border border-white/10 hover:border-white/20 transition-all cursor-pointer flex items-center gap-1"
+              >
+                <.icon name="hero-arrows-up-down" class="size-4" /> Trier
               </div>
-              <ul tabindex="0" class="dropdown-content menu bg-black border border-purple-500/20 rounded-xl z-10 w-44 p-2 shadow-2xl shadow-purple-600/10 mt-2">
+              <ul
+                tabindex="0"
+                class="dropdown-content menu bg-black border border-purple-500/20 rounded-xl z-10 w-44 p-2 shadow-2xl shadow-purple-600/10 mt-2"
+              >
                 <li :for={{label, value} <- sort_options()}>
                   <button
                     phx-click="sort"
                     phx-value-field={value}
-                    class={["text-sm", @sort_by == value && "text-purple-400", @sort_by != value && "text-white/60"]}
+                    class={[
+                      "text-sm",
+                      @sort_by == value && "text-purple-400",
+                      @sort_by != value && "text-white/60"
+                    ]}
                   >
                     {label}
                     <.icon
@@ -185,8 +215,7 @@ defmodule ShdxwWeb.TodoLive.Index do
               phx-click="toggle_new_form"
               class="px-4 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all flex items-center gap-2"
             >
-              <.icon name="hero-plus" class="size-4" />
-              Ajouter
+              <.icon name="hero-plus" class="size-4" /> Ajouter
             </button>
           </div>
         </div>
@@ -212,7 +241,9 @@ defmodule ShdxwWeb.TodoLive.Index do
               />
             </div>
             <div class="mb-3">
-              <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">Description</label>
+              <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">
+                Description
+              </label>
               <textarea
                 name={@form[:description].name}
                 placeholder="Détails optionnels..."
@@ -222,7 +253,9 @@ defmodule ShdxwWeb.TodoLive.Index do
             </div>
             <div class="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">Priorité</label>
+                <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">
+                  Priorité
+                </label>
                 <select
                   name={@form[:priority].name}
                   class="w-full bg-white/5 border border-white/10 focus:border-purple-500/50 rounded-lg px-4 py-2.5 text-white outline-none transition-all"
@@ -231,7 +264,9 @@ defmodule ShdxwWeb.TodoLive.Index do
                 </select>
               </div>
               <div>
-                <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">Échéance</label>
+                <label class="text-xs text-white/40 tracking-wider uppercase mb-1 block">
+                  Échéance
+                </label>
                 <input
                   type="date"
                   name={@form[:due_date].name}
@@ -259,7 +294,12 @@ defmodule ShdxwWeb.TodoLive.Index do
         </div>
 
         <%!-- === KANBAN VIEW === --%>
-        <div :if={@view_mode == :kanban} id="kanban-board" phx-hook="KanbanDrag" class="grid grid-cols-3 gap-5">
+        <div
+          :if={@view_mode == :kanban}
+          id="kanban-board"
+          phx-hook="KanbanDrag"
+          class="grid grid-cols-3 gap-5"
+        >
           <.kanban_column
             status={:pending}
             label="En attente"
@@ -482,7 +522,10 @@ defmodule ShdxwWeb.TodoLive.Index do
           </button>
         </div>
       </div>
-      <p :if={@todo.description && @todo.description != ""} class="text-xs text-white/30 mt-1.5 line-clamp-2">
+      <p
+        :if={@todo.description && @todo.description != ""}
+        class="text-xs text-white/30 mt-1.5 line-clamp-2"
+      >
         {@todo.description}
       </p>
       <div class="flex items-center gap-2 mt-2.5 flex-wrap">
@@ -493,8 +536,15 @@ defmodule ShdxwWeb.TodoLive.Index do
           {priority_label(@todo.priority)}
         </span>
         <div :if={@todo.due_date} class="flex items-center gap-1">
-          <.icon name="hero-calendar" class={"size-3 #{if overdue?(@todo), do: "text-red-400", else: "text-white/20"}"} />
-          <span class={["text-[10px]", overdue?(@todo) && "text-red-400 font-semibold", !overdue?(@todo) && "text-white/30"]}>
+          <.icon
+            name="hero-calendar"
+            class={"size-3 #{if overdue?(@todo), do: "text-red-400", else: "text-white/20"}"}
+          />
+          <span class={[
+            "text-[10px]",
+            overdue?(@todo) && "text-red-400 font-semibold",
+            !overdue?(@todo) && "text-white/30"
+          ]}>
             {format_due_date(@todo.due_date)}
           </span>
         </div>
@@ -529,12 +579,22 @@ defmodule ShdxwWeb.TodoLive.Index do
             {priority_label(@todo.priority)}
           </span>
         </div>
-        <p :if={@todo.description && @todo.description != ""} class="text-sm text-white/30 mt-1 line-clamp-2">
+        <p
+          :if={@todo.description && @todo.description != ""}
+          class="text-sm text-white/30 mt-1 line-clamp-2"
+        >
           {@todo.description}
         </p>
         <div :if={@todo.due_date} class="flex items-center gap-1 mt-1.5">
-          <.icon name="hero-calendar" class={"size-3 #{if overdue?(@todo), do: "text-red-400", else: "text-white/20"}"} />
-          <span class={["text-xs", overdue?(@todo) && "text-red-400 font-semibold", !overdue?(@todo) && "text-white/30"]}>
+          <.icon
+            name="hero-calendar"
+            class={"size-3 #{if overdue?(@todo), do: "text-red-400", else: "text-white/20"}"}
+          />
+          <span class={[
+            "text-xs",
+            overdue?(@todo) && "text-red-400 font-semibold",
+            !overdue?(@todo) && "text-white/30"
+          ]}>
             {format_due_date(@todo.due_date)}
             <span :if={overdue?(@todo)} class="ml-1">en retard</span>
           </span>
@@ -872,6 +932,18 @@ defmodule ShdxwWeb.TodoLive.Index do
       when event in [:todo_created, :todo_updated, :todo_deleted] do
     {:noreply, reload_todos(socket)}
   end
+
+  def handle_info({event, _}, socket) when event in [:xp_gained, :level_up, :streak_updated] do
+    scope = socket.assigns.current_scope
+    profile = Gamification.get_or_create_profile(scope)
+
+    {:noreply,
+     socket
+     |> assign(:profile, profile)
+     |> assign(:xp_progress, Gamification.xp_progress_in_level(profile.xp))}
+  end
+
+  def handle_info(_, socket), do: {:noreply, socket}
 
   # --- Helpers ---
 

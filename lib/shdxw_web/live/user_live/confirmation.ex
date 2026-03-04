@@ -31,7 +31,11 @@ defmodule ShdxwWeb.UserLive.Confirmation do
           >
             Confirm and stay logged in
           </button>
-          <button type="submit" phx-disable-with="Confirming..." class="btn btn-primary btn-soft w-full mt-2">
+          <button
+            type="submit"
+            phx-disable-with="Confirming..."
+            class="btn btn-primary btn-soft w-full mt-2"
+          >
             Confirm and log in only this time
           </button>
         </.form>
@@ -60,7 +64,11 @@ defmodule ShdxwWeb.UserLive.Confirmation do
             >
               Keep me logged in on this device
             </button>
-            <button type="submit" phx-disable-with="Logging in..." class="btn btn-primary btn-soft w-full mt-2">
+            <button
+              type="submit"
+              phx-disable-with="Logging in..."
+              class="btn btn-primary btn-soft w-full mt-2"
+            >
               Log me in only this time
             </button>
           <% end %>
