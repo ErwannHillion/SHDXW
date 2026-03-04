@@ -142,10 +142,18 @@ defmodule Shdxw.Todos do
 
     attrs = maybe_set_completed_at(todo, attrs)
 
+    was_not_done = todo.status != :done
+
     todo
     |> Todo.changeset(attrs)
     |> Repo.update()
-    |> tap_ok(fn todo -> broadcast(scope, :todo_updated, todo) end)
+    |> tap_ok(fn updated_todo ->
+      broadcast(scope, :todo_updated, updated_todo)
+
+      if updated_todo.status == :done and was_not_done do
+        Shdxw.Gamification.on_todo_completed(scope, updated_todo)
+      end
+    end)
   end
 
   def cycle_todo_status(%Scope{} = scope, %Todo{} = todo) do
@@ -161,7 +169,13 @@ defmodule Shdxw.Todos do
     todo
     |> Todo.status_changeset(%{status: next_status, completed_at: completed_at})
     |> Repo.update()
-    |> tap_ok(fn todo -> broadcast(scope, :todo_updated, todo) end)
+    |> tap_ok(fn updated_todo ->
+      broadcast(scope, :todo_updated, updated_todo)
+
+      if updated_todo.status == :done do
+        Shdxw.Gamification.on_todo_completed(scope, updated_todo)
+      end
+    end)
   end
 
   def delete_todo(%Scope{} = scope, %Todo{} = todo) do

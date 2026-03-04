@@ -21,7 +21,8 @@ defmodule ShdxwWeb.Helpers.Cipher do
     %{
       alphabet: alphabet,
       rune_to_index: alphabet |> Enum.with_index() |> Map.new(),
-      index_to_rune: alphabet |> Enum.with_index() |> Enum.map(fn {r, i} -> {i, r} end) |> Map.new(),
+      index_to_rune:
+        alphabet |> Enum.with_index() |> Enum.map(fn {r, i} -> {i, r} end) |> Map.new(),
       word_sep: System.get_env("CIPHER_WORD_SEP"),
       char_sep: System.get_env("CIPHER_CHAR_SEP"),
       offset: System.get_env("CIPHER_OFFSET") |> String.to_integer()

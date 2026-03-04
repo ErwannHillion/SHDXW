@@ -55,7 +55,12 @@ defmodule ShdxwWeb.Router do
       on_mount: [{ShdxwWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+      live "/dashboard", DashboardLive.Index, :index
       live "/todos", TodoLive.Index, :index
+      live "/habits", HabitsLive.Index, :index
+      live "/pomodoro", PomodoroLive.Index, :index
+      live "/shop", ShopLive.Index, :index
+      live "/achievements", AchievementsLive.Index, :index
     end
 
     post "/users/update-password", UserSessionController, :update_password
