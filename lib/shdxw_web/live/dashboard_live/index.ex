@@ -5,6 +5,8 @@ defmodule ShdxwWeb.DashboardLive.Index do
   alias Shdxw.DailyQuests
   alias Shdxw.Todos
   alias Shdxw.Pomodoro
+  alias Shdxw.Skins
+  alias Shdxw.Enchantments
 
   import ShdxwWeb.Components.GamificationBar
   import ShdxwWeb.Components.AppNav
@@ -25,6 +27,13 @@ defmodule ShdxwWeb.DashboardLive.Index do
     todo_stats = Todos.get_stats(scope)
     pomodoro_stats = Pomodoro.get_today_stats(scope)
     xp_progress = Gamification.xp_progress_in_level(profile.xp)
+    equipped_skin = Skins.get_equipped_skin(scope)
+    enchantment_summary = Enchantments.get_enchantment_summary(scope)
+    xp_multiplier = Gamification.get_xp_multiplier(scope)
+    skin_xp = Skins.get_skin_xp_boost(scope)
+    skin_gold = Skins.get_skin_gold_boost(scope)
+    ench_xp = Enchantments.get_total_xp_boost(scope)
+    ench_gold = Enchantments.get_total_gold_boost(scope)
 
     {:ok,
      socket
@@ -36,6 +45,11 @@ defmodule ShdxwWeb.DashboardLive.Index do
      |> assign(:todo_stats, todo_stats)
      |> assign(:pomodoro_stats, pomodoro_stats)
      |> assign(:xp_progress, xp_progress)
+     |> assign(:equipped_skin, equipped_skin)
+     |> assign(:enchantment_summary, enchantment_summary)
+     |> assign(:total_xp_boost, skin_xp + ench_xp)
+     |> assign(:total_gold_boost, skin_gold + ench_gold)
+     |> assign(:xp_multiplier, xp_multiplier)
      |> assign(:current_page, :dashboard)}
   end
 
@@ -65,15 +79,35 @@ defmodule ShdxwWeb.DashboardLive.Index do
       <Layouts.flash_group flash={@flash} />
 
       <div class="relative z-10 px-6 py-8 mx-auto max-w-6xl">
-        <%!-- Welcome --%>
-        <div class="mb-10">
-          <h1 class="text-5xl font-black text-white tracking-wider mb-2">
-            <span class="text-purple-500">Dash</span>board
-          </h1>
-          <div class="w-32 h-1 bg-gradient-to-r from-purple-500 to-transparent rounded-full mb-4" />
-          <p class="text-white/40 text-sm">
-            Niveau {@profile.level} — {@profile.title}
-          </p>
+        <%!-- Welcome + Mini Profile --%>
+        <div class="flex items-start justify-between mb-10">
+          <div>
+            <h1 class="text-5xl font-black text-white tracking-wider mb-2">
+              <span class="text-purple-500">Dash</span>board
+            </h1>
+            <div class="w-32 h-1 bg-gradient-to-r from-purple-500 to-transparent rounded-full mb-4" />
+            <p class="text-white/40 text-sm">
+              Niveau {@profile.level} — {@profile.title}
+            </p>
+          </div>
+
+          <%!-- Mini Profile Card --%>
+          <a href={~p"/profile"} class="hidden md:flex items-center gap-3 bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/20 rounded-2xl px-5 py-3 hover:border-purple-500/40 transition-all group">
+            <div class={[
+              "w-12 h-12 rounded-full flex items-center justify-center text-xl border",
+              if(@equipped_skin, do: skin_border_class(@equipped_skin.skin.rarity), else: "border-white/20 bg-white/5")
+            ]}>
+              {if @equipped_skin, do: @equipped_skin.skin.icon, else: "👤"}
+            </div>
+            <div>
+              <div class="text-white font-bold text-sm group-hover:text-purple-300 transition-colors">{@profile.title}</div>
+              <div class="flex items-center gap-2 text-xs">
+                <span :if={@total_xp_boost > 0} class="text-purple-400">+{@total_xp_boost}% XP</span>
+                <span :if={@total_gold_boost > 0} class="text-amber-400">+{@total_gold_boost}% Or</span>
+                <span :if={@xp_multiplier > 1} class="text-cyan-400">x{@xp_multiplier} boost</span>
+              </div>
+            </div>
+          </a>
         </div>
 
         <%!-- XP Progress Bar --%>
@@ -104,6 +138,29 @@ defmodule ShdxwWeb.DashboardLive.Index do
           <div class="flex justify-between text-xs text-white/30 mt-2">
             <span>{@xp_progress.current} / {@xp_progress.needed} XP</span>
             <span>{@xp_progress.percent}%</span>
+          </div>
+        </div>
+
+        <%!-- Active Boosts Banner --%>
+        <div :if={@total_xp_boost > 0 or @total_gold_boost > 0 or @xp_multiplier > 1}
+          class="bg-gradient-to-r from-cyan-950/30 via-purple-950/30 to-amber-950/30 border border-cyan-500/20 rounded-2xl p-4 mb-8">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🔮</span>
+            <span class="text-white font-bold text-sm">Boosts actifs</span>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <div :if={@xp_multiplier > 1} class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-600/20 border border-cyan-500/30">
+              <span class="text-cyan-400 text-sm">⚡ Multiplicateur XP x{@xp_multiplier}</span>
+            </div>
+            <div :if={@total_xp_boost > 0} class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-600/20 border border-purple-500/30">
+              <span class="text-purple-400 text-sm">✨ +{@total_xp_boost}% XP permanent</span>
+            </div>
+            <div :if={@total_gold_boost > 0} class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-600/20 border border-amber-500/30">
+              <span class="text-amber-400 text-sm">💰 +{@total_gold_boost}% Or permanent</span>
+            </div>
+            <div :for={ench <- @enchantment_summary} class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10">
+              <span class="text-white/60 text-sm">{ench.icon} {ench.name} {ench.roman}</span>
+            </div>
           </div>
         </div>
 
@@ -139,6 +196,7 @@ defmodule ShdxwWeb.DashboardLive.Index do
             <h2 class="font-black text-white tracking-wider mb-4 flex items-center gap-2">
               <span class="text-xl">&#x2694;</span>
               <span>Quetes du <span class="text-purple-500">jour</span></span>
+              <span class="ml-auto text-xs text-emerald-400 font-normal">{quests_completed(@quests)}/{length(@quests)}</span>
             </h2>
             <div class="space-y-3">
               <div
@@ -158,7 +216,7 @@ defmodule ShdxwWeb.DashboardLive.Index do
                     {quest.description}
                   </span>
                   <span :if={quest.status == :completed} class="text-emerald-400 text-xs font-bold">
-                    FAIT
+                    FAIT ✓
                   </span>
                 </div>
                 <div class="w-full h-2 bg-white/5 rounded-full overflow-hidden">
@@ -214,7 +272,7 @@ defmodule ShdxwWeb.DashboardLive.Index do
         </div>
 
         <%!-- Quick Actions --%>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
           <a
             href={~p"/todos"}
             class="bg-gradient-to-br from-purple-950/40 to-black border border-purple-500/20 rounded-2xl p-5 text-center hover:border-purple-500/40 hover:shadow-lg hover:shadow-purple-600/10 transition-all group"
@@ -249,6 +307,14 @@ defmodule ShdxwWeb.DashboardLive.Index do
             <div class="text-sm font-bold text-white/80 group-hover:text-white">Boutique</div>
             <div class="text-xs text-amber-400/60 mt-1">{@profile.gold} or disponible</div>
           </a>
+          <a
+            href={~p"/korean"}
+            class="bg-gradient-to-br from-rose-950/40 to-black border border-rose-500/20 rounded-2xl p-5 text-center hover:border-rose-500/40 hover:shadow-lg hover:shadow-rose-600/10 transition-all group"
+          >
+            <div class="text-3xl mb-2">&#x1F1F0;&#x1F1F7;</div>
+            <div class="text-sm font-bold text-white/80 group-hover:text-white">Coreen</div>
+            <div class="text-xs text-rose-400/60 mt-1">Apprendre le Hangul</div>
+          </a>
         </div>
 
         <%!-- Today's XP/Gold Summary --%>
@@ -266,6 +332,11 @@ defmodule ShdxwWeb.DashboardLive.Index do
           <div class="text-center">
             <div class="text-xs text-white/30 uppercase tracking-wider">Total todos</div>
             <div class="text-xl font-black text-emerald-400">{@profile.total_todos_completed}</div>
+          </div>
+          <div class="w-px h-8 bg-white/10" />
+          <div class="text-center">
+            <div class="text-xs text-white/30 uppercase tracking-wider">Meilleur streak</div>
+            <div class="text-xl font-black text-orange-400">{@profile.longest_streak}</div>
           </div>
         </div>
       </div>
@@ -301,6 +372,11 @@ defmodule ShdxwWeb.DashboardLive.Index do
     |> assign(:recent_events, Gamification.list_recent_events(scope, limit: 8))
     |> assign(:todo_stats, Todos.get_stats(scope))
     |> assign(:pomodoro_stats, Pomodoro.get_today_stats(scope))
+    |> assign(:equipped_skin, Skins.get_equipped_skin(scope))
+    |> assign(:enchantment_summary, Enchantments.get_enchantment_summary(scope))
+    |> assign(:total_xp_boost, Skins.get_skin_xp_boost(scope) + Enchantments.get_total_xp_boost(scope))
+    |> assign(:total_gold_boost, Skins.get_skin_gold_boost(scope) + Enchantments.get_total_gold_boost(scope))
+    |> assign(:xp_multiplier, Gamification.get_xp_multiplier(scope))
   end
 
   defp quest_percent(%{target_value: 0}), do: 0
@@ -308,7 +384,22 @@ defmodule ShdxwWeb.DashboardLive.Index do
   defp quest_percent(%{current_value: current, target_value: target}),
     do: round(min(current / target, 1) * 100)
 
+  defp quests_completed(quests) do
+    Enum.count(quests, fn q -> q.status == :completed end)
+  end
+
   defp format_time(datetime) do
     Calendar.strftime(datetime, "%H:%M")
+  end
+
+  defp skin_border_class(rarity) do
+    case rarity do
+      :common -> "border-gray-400/50 bg-gray-900/50"
+      :rare -> "border-blue-400/50 bg-blue-900/30"
+      :epic -> "border-purple-400/50 bg-purple-900/30"
+      :legendary -> "border-amber-400/50 bg-amber-900/30"
+      :mythic -> "border-red-400/50 bg-red-900/30"
+      _ -> "border-white/20 bg-white/5"
+    end
   end
 end
