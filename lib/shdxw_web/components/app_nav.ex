@@ -50,6 +50,12 @@ defmodule ShdxwWeb.Components.AppNav do
           label="Succes"
           active={@current_page == :achievements}
         />
+        <.nav_link
+          href={~p"/profile"}
+          icon="hero-user-circle"
+          label="Profil"
+          active={@current_page == :profile}
+        />
       </div>
       <div class="flex items-center gap-3">
         <span class="text-white text-xs hidden md:block">{@current_scope.user.email}</span>

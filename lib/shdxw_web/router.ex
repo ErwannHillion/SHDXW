@@ -61,6 +61,7 @@ defmodule ShdxwWeb.Router do
       live "/pomodoro", PomodoroLive.Index, :index
       live "/shop", ShopLive.Index, :index
       live "/achievements", AchievementsLive.Index, :index
+      live "/profile", ProfileLive.Index, :index
     end
 
     post "/users/update-password", UserSessionController, :update_password
