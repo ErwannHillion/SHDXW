@@ -51,6 +51,12 @@ defmodule ShdxwWeb.Components.AppNav do
           active={@current_page == :achievements}
         />
         <.nav_link
+          href={~p"/korean"}
+          icon="hero-language"
+          label="Coreen"
+          active={@current_page == :korean}
+        />
+        <.nav_link
           href={~p"/profile"}
           icon="hero-user-circle"
           label="Profil"
