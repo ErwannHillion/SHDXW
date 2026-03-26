@@ -3,6 +3,7 @@ defmodule ShdxwWeb.KoreanLive.Index do
 
   alias Shdxw.Korean
   alias Shdxw.Gamification
+  alias ShdxwWeb.Helpers.Cipher
 
   import ShdxwWeb.Components.GamificationBar
   import ShdxwWeb.Components.AppNav
@@ -219,7 +220,7 @@ defmodule ShdxwWeb.KoreanLive.Index do
 
     <div class="bg-gradient-to-br from-rose-950/30 to-black border border-rose-500/20 rounded-2xl p-8 mb-8">
       <div class="prose prose-invert prose-sm max-w-none korean-content">
-        {Phoenix.HTML.raw(parse_lesson_content(@lesson.content))}
+        {Phoenix.HTML.raw(parse_lesson_content(decrypt_content(@lesson.content)))}
       </div>
     </div>
 
@@ -237,7 +238,8 @@ defmodule ShdxwWeb.KoreanLive.Index do
   # --- Quiz ---
 
   defp render_quiz(assigns) do
-    current_q = Enum.at(assigns.questions, assigns.index)
+    raw_q = Enum.at(assigns.questions, assigns.index)
+    current_q = if raw_q, do: decrypt_question(raw_q), else: nil
     total = length(assigns.questions)
     assigns = assign(assigns, :current_q, current_q)
     assigns = assign(assigns, :total, total)
@@ -422,8 +424,9 @@ defmodule ShdxwWeb.KoreanLive.Index do
     index = socket.assigns.quiz_index
     answer = socket.assigns.selected_answer
     question = Enum.at(socket.assigns.quiz_questions, index)
+    decrypted_q = decrypt_question(question)
 
-    correct = answer == question.correct_answer
+    correct = answer == decrypted_q.correct_answer
     answers = Map.put(socket.assigns.quiz_answers, index, correct)
 
     {:noreply,
@@ -511,6 +514,22 @@ defmodule ShdxwWeb.KoreanLive.Index do
       unlocked -> "border-rose-500/50 bg-rose-600/20 text-rose-400"
       true -> "border-white/10 bg-white/5 text-white/20"
     end
+  end
+
+  defp decrypt_content(content) do
+    case Cipher.decode(content) do
+      {:ok, decoded} -> decoded
+      {:error, _} -> content
+    end
+  end
+
+  defp decrypt_question(question) do
+    %{question |
+      question: decrypt_content(question.question),
+      correct_answer: decrypt_content(question.correct_answer),
+      options: Enum.map(question.options, &decrypt_content/1),
+      explanation: if(question.explanation, do: decrypt_content(question.explanation), else: nil)
+    }
   end
 
   defp parse_lesson_content(content) do
