@@ -121,7 +121,7 @@ shop_items = [
 for item_attrs <- shop_items do
   case Repo.get_by(ShopItem, effect: item_attrs.effect) do
     nil -> Repo.insert!(%ShopItem{} |> ShopItem.changeset(item_attrs))
-    _existing -> :ok
+    existing -> Repo.update!(ShopItem.changeset(existing, item_attrs))
   end
 end
 
@@ -403,8 +403,19 @@ achievements = [
 for achievement_attrs <- achievements do
   case Repo.get_by(Achievement, key: achievement_attrs.key) do
     nil -> Repo.insert!(%Achievement{} |> Achievement.changeset(achievement_attrs))
-    _existing -> :ok
+    existing -> Repo.update!(Achievement.changeset(existing, achievement_attrs))
   end
 end
 
 IO.puts("Seed terminé : #{length(achievements)} achievements")
+
+# === Skins ===
+Shdxw.Skins.seed_skins()
+IO.puts("Seed terminé : skins")
+
+# === Enchantments ===
+Shdxw.Enchantments.seed_enchantments()
+IO.puts("Seed terminé : enchantments")
+
+# === Korean Lessons ===
+Code.eval_file("priv/repo/seeds_korean.exs")

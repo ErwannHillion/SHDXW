@@ -38,4 +38,5 @@ npm-debug.log
 /.env
 .env.*.local
 
-
+# Plaintext Korean lesson content (encrypted version in seeds_korean.exs)
+priv/repo/_encrypt_helper.exs

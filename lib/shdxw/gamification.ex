@@ -148,13 +148,17 @@ defmodule Shdxw.Gamification do
   def award_xp_and_gold(%Scope{} = scope, source, source_id, base_xp, gold, description) do
     profile = get_or_create_profile(scope)
 
-    # Apply XP multiplier from active boosts
+    # Apply XP multiplier from active boosts + skin boost
     multiplier = get_xp_multiplier(scope)
-    final_xp = round(base_xp * multiplier)
+    skin_xp_boost = Shdxw.Skins.get_skin_xp_boost(scope)
+    enchant_xp_boost = Shdxw.Enchantments.get_total_xp_boost(scope)
+    final_xp = round(base_xp * multiplier * (1 + (skin_xp_boost + enchant_xp_boost) / 100))
 
-    # Apply gold multiplier
+    # Apply gold multiplier + skin boost
     gold_multiplier = get_gold_multiplier(scope)
-    final_gold = round(gold * gold_multiplier)
+    skin_gold_boost = Shdxw.Skins.get_skin_gold_boost(scope)
+    enchant_gold_boost = Shdxw.Enchantments.get_total_gold_boost(scope)
+    final_gold = round(gold * gold_multiplier * (1 + (skin_gold_boost + enchant_gold_boost) / 100))
 
     new_xp = profile.xp + final_xp
     new_gold = profile.gold + final_gold
