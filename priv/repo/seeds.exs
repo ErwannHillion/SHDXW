@@ -412,3 +412,7 @@ IO.puts("Seed terminé : #{length(achievements)} achievements")
 # === Skins ===
 Shdxw.Skins.seed_skins()
 IO.puts("Seed terminé : skins")
+
+# === Enchantments ===
+Shdxw.Enchantments.seed_enchantments()
+IO.puts("Seed terminé : enchantments")
