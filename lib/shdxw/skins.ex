@@ -140,7 +140,7 @@ defmodule Shdxw.Skins do
     Enum.each(skins, fn skin_attrs ->
       case Repo.get_by(Skin, name: skin_attrs.name) do
         nil -> %Skin{} |> Skin.changeset(skin_attrs) |> Repo.insert!()
-        _existing -> :ok
+        existing -> existing |> Skin.changeset(skin_attrs) |> Repo.update!()
       end
     end)
   end

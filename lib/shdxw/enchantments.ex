@@ -191,7 +191,7 @@ defmodule Shdxw.Enchantments do
     Enum.each(enchantments, fn attrs ->
       case Repo.get_by(Enchantment, name: attrs.name) do
         nil -> %Enchantment{} |> Enchantment.changeset(attrs) |> Repo.insert!()
-        _existing -> :ok
+        existing -> existing |> Enchantment.changeset(attrs) |> Repo.update!()
       end
     end)
   end
