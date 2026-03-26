@@ -416,3 +416,6 @@ IO.puts("Seed terminé : skins")
 # === Enchantments ===
 Shdxw.Enchantments.seed_enchantments()
 IO.puts("Seed terminé : enchantments")
+
+# === Korean Lessons ===
+Code.eval_file("priv/repo/seeds_korean.exs")
