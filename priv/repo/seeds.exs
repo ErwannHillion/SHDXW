@@ -408,3 +408,7 @@ for achievement_attrs <- achievements do
 end
 
 IO.puts("Seed terminé : #{length(achievements)} achievements")
+
+# === Skins ===
+Shdxw.Skins.seed_skins()
+IO.puts("Seed terminé : skins")
